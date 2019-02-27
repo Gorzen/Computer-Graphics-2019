@@ -36,10 +36,10 @@ public:
     /// Compute the intersection of the sphere with \c _ray. Return whether
     /// there is an intersection. If there is one, return the intersection data.
     /// This function overrides Object::intersect().
-	/// \param[in] _ray the ray to intersect the plane with
-	/// \param[out] _intersection_point position of the intersection
-	/// \param[out] _intersection_normal normal vector at the intersection point
-	/// \param[out] _intersection_t ray parameter at the intesection point
+    /// \param[in] _ray the ray to intersect the plane with
+    /// \param[out] _intersection_point position of the intersection
+    /// \param[out] _intersection_normal normal vector at the intersection point
+    /// \param[out] _intersection_t ray parameter at the intesection point
     virtual bool intersect(const Ray&  _ray,
                            vec3&       _intersection_point,
                            vec3&       _intersection_normal,
@@ -51,10 +51,10 @@ public:
     }
 
 private:
-	/// center position of the sphere
+    /// center position of the sphere
     vec3   center;
 
-	/// radius of the sphere
+    /// radius of the sphere
     double radius;
 };
 

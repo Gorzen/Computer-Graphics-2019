@@ -61,17 +61,8 @@ to render all scenes at once.
 To set the command line parameters in MSVC or Xcode, please refer to the documentation of these programs (or use the command line...).
 
 
-Assignment 1: Planes and Cylinders
-----------------------------------
-In this assignment, you will implement ray intersections with planes and
-cylinders and compute surface normals at the intersection points. The framework
-code provided this week is identical to last week's, except `todo` comments
-have been inserted in `Plane.cpp` and `Cylinder to indicate where you need to
-add your implementations.
+Assignment 0: "Hello World"
+---------------------------
+Edit scenes/solid_color/solid_color.sce to produce the color of your choice and render it to an output file titled "solid_color.png".
 
-If you already set up a GitHub repository last week to collaborate with your
-fellow group members, you can copy these TODO comments over to your repository
-(or just note where your implementation needs to go and get started).
-
-Please see the assignment handout PDF for more information and submission
-instructions. Note: there is a theory exercise for this assignment!
+Please also consider setting up a private git repository for your group to collaborate on the future raytracing assignments.

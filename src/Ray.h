@@ -28,7 +28,7 @@ class Ray
 {
 public:
 
-	/// Constructor with origin and direction. Direction will be normalized.
+    /// Constructor with origin and direction. Direction will be normalized.
     Ray(const vec3& _origin    = vec3(0,0,0),
         const vec3& _direction = vec3(0,0,1))
     {
@@ -36,7 +36,7 @@ public:
         direction = normalize(_direction); // normalize direction
     }
 
-	/// Compute the point on the ray at the parameter \c _t, which is
+    /// Compute the point on the ray at the parameter \c _t, which is
     /// origin + _t*direction.
     vec3 operator()(double _t) const
     {

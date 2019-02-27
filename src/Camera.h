@@ -28,11 +28,9 @@ class Camera
 {
 public:
 
-	
     /// Default (empty) constructor
     Camera() {}
 
-	
     /// Construct camera by specifying all required data. Calls init().
     /// \param[in] _eye Camera center
     /// \param[in] _center Center of the scene, which the camera is looking at.
@@ -52,7 +50,7 @@ public:
     }
 
 
-	/// This function precomputes some variables that are later required for primary_ray()
+    /// This function precomputes some variables that are later required for primary_ray()
     void init()
     {
         // compute viewing direction and distance of eye to scene center
@@ -77,8 +75,8 @@ public:
 
 
     /// create a ray for a pixel in the image
-	/// \param[in] _x pixel location in image
-	/// \param[in] _y pixel location in image
+    /// \param[in] _x pixel location in image
+    /// \param[in] _y pixel location in image
     Ray primary_ray(unsigned int _x, unsigned int _y) const
     {
         return Ray(eye, lower_left + static_cast<double>(_x)*x_dir + static_cast<double>(_y)*y_dir - eye);
@@ -89,28 +87,28 @@ public:
 
     /// position of the eye in 3D space (camera center)
     vec3 eye;
-	
+    
     /// the center of the scene the camera is looking at
-	vec3 center;
+    vec3 center;
 
-	/// up-direction of the camera
-	vec3 up;
+    /// up-direction of the camera
+    vec3 up;
 
-	/// opening angle (field of view) in y-direction
+    /// opening angle (field of view) in y-direction
     double  fovy;
 
-	/// image width in pixels
+    /// image width in pixels
     unsigned int width;
 
-	/// image height in pixels
-	unsigned int height;
+    /// image height in pixels
+    unsigned int height;
 
 
 private:
 
     vec3 x_dir;
-	vec3 y_dir;
-	vec3 lower_left;
+    vec3 y_dir;
+    vec3 lower_left;
 };
 
 

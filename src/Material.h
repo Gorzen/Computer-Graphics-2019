@@ -24,19 +24,19 @@
 /// This class stores all material parameters.
 struct Material
 {
-	/// ambient color
+    /// ambient color
     vec3   ambient;
 
     /// diffuse color
-	vec3   diffuse;
+    vec3   diffuse;
 
     /// specular color
-	vec3   specular;
+    vec3   specular;
 
-	/// shininess factor
+    /// shininess factor
     double shininess;
 
-	/// reflectivity factor (1=perfect mirror, 0=no reflection).
+    /// reflectivity factor (1=perfect mirror, 0=no reflection).
     double mirror;
 };
 

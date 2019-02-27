@@ -29,17 +29,17 @@ class Image
 {
 public:
 
-	/// Construct an image of size _width times _height
-	/// \param _width Width of the image in pixels
-	/// \param _height Height of the image in pixels
+    /// Construct an image of size _width times _height
+    /// \param _width Width of the image in pixels
+    /// \param _height Height of the image in pixels
     Image(unsigned int _width=0, unsigned int _height=0)
     {
         resize(_width, _height);
     }
 
-	/// Resize the image
-	/// \param _width New width of the image in pixels
-	/// \param _height New height of the image in pixels
+    /// Resize the image
+    /// \param _width New width of the image in pixels
+    /// \param _height New height of the image in pixels
     void resize(unsigned int _width, unsigned int _height)
     {
         width_  = _width;
@@ -77,24 +77,24 @@ public:
     }
 
     /// Writes the image in PNG or TGA format depending on the file name.
-	/// \param[in] filename Filename to save the image to.
+    /// \param[in] filename Filename to save the image to.
     bool write(const std::string &_filename) const;
 
     /// Writes the image in TGA format to a file.
-	/// \param[in] _filename Filename to save the image to.
+    /// \param[in] _filename Filename to save the image to.
     bool write_tga(const std::string &_filename) const;
     bool write_png(const std::string &_filename) const; 
 
 private:
 
-	/// vector with all pixels in the image
+    /// vector with all pixels in the image
     std::vector<vec3> pixels_;
-	
+    
     /// image width in pixels
     unsigned short int width_;
-	
+    
     /// image height in pixels
-	unsigned short int height_;
+    unsigned short int height_;
 };
 
 

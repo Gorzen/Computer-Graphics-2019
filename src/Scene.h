@@ -41,29 +41,29 @@ public:
 
     /// Determine the color seen by a viewing ray
     /**
-    *	@param[in] _ray passed Ray
-    *	@param[in] _depth holds the information, how many times the `_ray` had been reflected. Goes from 0 to max_depth. Should be used for recursive function call.
-    *	@return    color
-    **/	
+    *   @param[in] _ray passed Ray
+    *   @param[in] _depth holds the information, how many times the `_ray` had been reflected. Goes from 0 to max_depth. Should be used for recursive function call.
+    *   @return    color
+    **/ 
     vec3  trace(const Ray& _ray, int _depth);
 
     /// Computes the closest intersection point between a ray and all objects in the scene.
     /**
-    *   	@param _ray Ray that should be tested for intersections with all objects in the scene.
-    *   	@param _Object_ptr Output parameter which holds the object from the scene, intersected by the `_ray`, closest to the `_ray`'s origin.
-    *   	@param _point returns intersection point
-    *   	@param _normal returns normal at `_point`
-    *   	@param _t returns distance between the `_ray`'s origin and `_point`
-    *   	@return returns `true`, if there is an intersection point between `_ray` and at least one object in the scene.
+    *       @param _ray Ray that should be tested for intersections with all objects in the scene.
+    *       @param _Object_ptr Output parameter which holds the object from the scene, intersected by the `_ray`, closest to the `_ray`'s origin.
+    *       @param _point returns intersection point
+    *       @param _normal returns normal at `_point`
+    *       @param _t returns distance between the `_ray`'s origin and `_point`
+    *       @return returns `true`, if there is an intersection point between `_ray` and at least one object in the scene.
     **/
     bool  intersect(const Ray& _ray, Object_ptr&, vec3& _point, vec3& _normal, double& _t);
 
     /// Computes the phong lighting for a given object intersection
     /**
-    *	@param _point the point, whose color should be determined.
-    *	@param _normal `_point`'s normal
-    *	@param _view normalized direction from the point to the viewer's position.
-    * 	@param _material holds material parameters of the `_point`, that should be lit.
+    *   @param _point the point, whose color should be determined.
+    *   @param _normal `_point`'s normal
+    *   @param _view normalized direction from the point to the viewer's position.
+    *   @param _material holds material parameters of the `_point`, that should be lit.
     */
     vec3  lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material);
 
