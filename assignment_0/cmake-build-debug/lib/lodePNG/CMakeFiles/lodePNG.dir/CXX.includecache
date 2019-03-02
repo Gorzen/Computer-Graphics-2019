@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/lucas/Google Drive/Semestre 6/Introduction to Computer Graphics/Git/assignment_0/lib/lodePNG/lodepng.cpp
+lodepng.h
+C:/Users/lucas/Google Drive/Semestre 6/Introduction to Computer Graphics/Git/assignment_0/lib/lodePNG/lodepng.h
+stdio.h
+-
+stdlib.h
+-
+fstream
+-
+
+C:/Users/lucas/Google Drive/Semestre 6/Introduction to Computer Graphics/Git/assignment_0/lib/lodePNG/lodepng.h
+string.h
+-
+vector
+-
+string
+-
+lodepng.h
+C:/Users/lucas/Google Drive/Semestre 6/Introduction to Computer Graphics/Git/assignment_0/lib/lodePNG/lodepng.h
+iostream
+-
+lodepng.h
+C:/Users/lucas/Google Drive/Semestre 6/Introduction to Computer Graphics/Git/assignment_0/lib/lodePNG/lodepng.h
+

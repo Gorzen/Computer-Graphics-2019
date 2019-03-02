@@ -48,13 +48,24 @@ intersect(const Ray&  _ray,
 
   const vec3 point = _ray(_intersection_t);
   const vec3 projection = dot((point - center), v) * v + center;
-  const vec3 normal = (point - projection) / r;
+  vec3 normal = (point - projection) / r;
 
   // Check point is on cylinder
   if(norm(projection - center) > height / 2.0){
     _intersection_t = NO_INTERSECTION;
     return false;
   }
+
+  /**
+   * J'essaie de tester si l'angle entre le rayon et la normale est plus grand que 90°, dans ce cas
+   * ça veut dire que la normale est dans le mauvais sens
+  double angle_ray_normal = dot(d, normal)/(norm(normal)*norm(d)); //Donne le cos de l'angle
+  if (angle_ray_normal < 0){ // cos négatif => angle plus grand que 90°
+    const vec3 null_vec = vec3(0); 
+    normal = null_vec - normal; //pour inverser les composantes
+    normal = reflect(normal, d); //un autre essai pour tenter de changer la direction du vecteur
+  }
+  */
 
   _intersection_point  = point;
   _intersection_normal = normal;

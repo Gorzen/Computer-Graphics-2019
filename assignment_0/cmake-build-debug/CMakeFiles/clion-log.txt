@@ -1,0 +1,23 @@
+"C:\Program Files\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" "C:\Users\lucas\Google Drive\Semestre 6\Introduction to Computer Graphics\Git\assignment_0"
+CMake Warning (dev) at CMakeLists.txt:26 (find_package):
+  Policy CMP0074 is not set: find_package uses <PackageName>_ROOT variables.
+  Run "cmake --help-policy CMP0074" for policy details.  Use the cmake_policy
+  command to set the policy and suppress this warning.
+
+  CMake variable TBB_ROOT is set to:
+
+    TBB_ROOT-NOTFOUND
+
+  For compatibility, CMake is ignoring the variable.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Could NOT find TBB (missing: TBB_INCLUDE_DIR TBB_LIBRARY TBB_LIBRARY_MALLOC) 
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: C:/Users/lucas/Google Drive/Semestre 6/Introduction to Computer Graphics/Git/assignment_0/cmake-build-debug
+
+Problems were encountered while collecting compiler information:
+	g++.exe: error: /openmp: No such file or directory
+	g++.exe: error: /openmp: No such file or directory
+	g++.exe: error: /openmp: No such file or directory
