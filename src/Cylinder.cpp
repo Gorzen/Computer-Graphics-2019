@@ -39,19 +39,24 @@ intersect(const Ray&  _ray,
 
   _intersection_t = NO_INTERSECTION;
 
-  // Find the closest valid solution (in front of the viewer)
-  for (size_t i = 0; i < nsol; ++i) {
-      if (t[i] > 0) _intersection_t = std::min(_intersection_t, t[i]);
-  }
+  if (nsol == 0) return false;
 
-  if (_intersection_t == NO_INTERSECTION) return false;
+  // Find the closest valid solution (in front of the viewer)
+  /**
+   * Le problème est là ! Si on inverse le signe
+   * _intersection_t = -std::min(_intersection_t, t[i]);
+   * alors on voit que l'intérieur du cylindre (plus l'extérieur)
+   */
+  for (size_t i = 0; i < nsol; ++i) {
+      if (t[i] > 0) _intersection_t = std::min(_intersection_t, t[i]); 
+  }
 
   const vec3 point = _ray(_intersection_t);
   const vec3 projection = dot((point - center), v) * v + center;
   vec3 normal = (point - projection) / r;
 
   // Check point is on cylinder
-  if(norm(projection - center) > height / 2.0){
+  if(norm(projection - center) > height / 2.0) {
     _intersection_t = NO_INTERSECTION;
     return false;
   }
