@@ -53,7 +53,7 @@ intersect(const Ray&  _ray,
       vec3 projection = dot((point - center), v) * v + center;
 
       // Check point is on cylinder
-      if (norm(projection - center) > height / 2.0) {
+      if (norm(projection - center) <= height / 2.0) {
         _intersection_t = std::min(_intersection_t, t[i]);
         normal = (point - projection) / r;
       }
