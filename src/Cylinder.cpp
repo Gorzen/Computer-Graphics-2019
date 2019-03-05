@@ -48,13 +48,13 @@ intersect(const Ray&  _ray,
    * alors on voit que l'intérieur du cylindre (plus l'extérieur)
    */
   for (size_t i = 0; i < nsol; ++i) {
-    if(t[i] > 0) {
+    if(t[i] > 0 && (_intersection_t == NO_INTERSECTION || _intersection_t > t[i])) {
       vec3 point = _ray(t[i]);
       vec3 projection = dot((point - center), v) * v + center;
 
       // Check point is on cylinder
       if (norm(projection - center) <= height / 2.0) {
-        _intersection_t = std::min(_intersection_t, t[i]);
+        _intersection_t = t[i];
         normal = (point - projection) / r;
       }
     }
