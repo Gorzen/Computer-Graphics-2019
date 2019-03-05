@@ -42,11 +42,7 @@ intersect(const Ray&  _ray,
   vec3 normal;
 
   // Find the closest valid solution (in front of the viewer)
-  /**
-   * Le problème est là ! Si on inverse le signe
-   * _intersection_t = -std::min(_intersection_t, t[i]);
-   * alors on voit que l'intérieur du cylindre (plus l'extérieur)
-   */
+  // And filter out rays that are out of bounds
   for (size_t i = 0; i < nsol; ++i) {
     if(t[i] > 0 && (_intersection_t == NO_INTERSECTION || _intersection_t > t[i])) {
       vec3 point = _ray(t[i]);
@@ -62,21 +58,10 @@ intersect(const Ray&  _ray,
 
   if (_intersection_t == NO_INTERSECTION) return false;
 
-  /**
-   * J'essaie de tester si l'angle entre le rayon et la normale est plus grand que 90°, dans ce cas
-   * ça veut dire que la normale est dans le mauvais sens
-  double angle_ray_normal = dot(d, normal)/(norm(normal)*norm(d)); //Donne le cos de l'angle
-  if (angle_ray_normal < 0){ // cos négatif => angle plus grand que 90°
+  double angle_ray_normal = dot(d, normal)/(norm(normal)*norm(d)); 
+  if (angle_ray_normal > 0){
     const vec3 null_vec = vec3(0);
-    normal = null_vec - normal; //pour inverser les composantes
-    normal = reflect(normal, d); //un autre essai pour tenter de changer la direction du vecteur
-  }
-  */
-
-  double angle_ray_normal = dot(d, normal)/(norm(normal)*norm(d)); //Donne le cos de l'angle
-  if (angle_ray_normal > 0){ // cos négatif => angle plus grand que 90°
-    const vec3 null_vec = vec3(0);
-    normal = null_vec - normal; //pour inverser les composantes
+    normal = null_vec - normal; 
   }
 
   _intersection_point  = _ray(_intersection_t);
