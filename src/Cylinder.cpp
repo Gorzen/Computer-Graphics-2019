@@ -74,7 +74,7 @@ intersect(const Ray&  _ray,
   */
 
   double angle_ray_normal = dot(d, normal)/(norm(normal)*norm(d)); //Donne le cos de l'angle
-  if (angle_ray_normal < 0){ // cos négatif => angle plus grand que 90°
+  if (angle_ray_normal > 0){ // cos négatif => angle plus grand que 90°
     const vec3 null_vec = vec3(0);
     normal = null_vec - normal; //pour inverser les composantes
   }
