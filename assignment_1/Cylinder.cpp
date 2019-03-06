@@ -25,6 +25,7 @@ intersect(const Ray&  _ray,
           vec3&       _intersection_normal,
           double&     _intersection_t) const
 {
+  // We use the same names as in our pdf where we solve equations
   const vec3 d = _ray.direction;
   const vec3 y = _ray.origin - center;
   const vec3 v = axis;
