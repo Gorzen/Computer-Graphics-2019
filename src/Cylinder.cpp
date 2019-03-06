@@ -60,8 +60,7 @@ intersect(const Ray&  _ray,
 
   double angle_ray_normal = dot(d, normal)/(norm(normal)*norm(d)); 
   if (angle_ray_normal > 0){
-    const vec3 null_vec = vec3(0);
-    normal = null_vec - normal; 
+    normal = -normal; 
   }
 
   _intersection_point  = _ray(_intersection_t);
