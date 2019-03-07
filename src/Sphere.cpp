@@ -37,6 +37,8 @@ intersect(const Ray&  _ray,
     const vec3 &dir = _ray.direction;
     const vec3   oc = _ray.origin - center;
 
+    
+
     std::array<double, 2> t;
     size_t nsol = solveQuadratic(dot(dir, dir),
                                  2 * dot(dir, oc),

@@ -133,21 +133,21 @@ bool Scene::intersect(const Ray& _ray, Object_ptr& _object, vec3& _point, vec3& 
 
 vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material)
 {
+     const vec3 i_a = ambience;
+     const vec3 m_a = _material.ambient;
+     const vec3 m_d = _material.diffuse;
+     const vec3 m_s = _material.specular;
+     const double s = _material.shininess;
 
-     /** \todo
-     * Compute the Phong lighting:
-     * - start with global ambient contribution
-     * - for each light source (stored in vector `lights`) add diffuse and specular contribution
-     * - only add diffuse and specular light if object is not in shadow
-     *
-     * You can look at the classes `Light` and `Material` to check their attributes. Feel free to use
-     * the existing vector functions in vec3.h e.g. mirror, reflect, norm, dot, normalize
-     */
+     // Diffuse, sepcular and ambient
+     vec3 diffuse_specular = i_a * m_a;
 
-    // visualize the normal as a RGB color for now.
-    vec3 color = (_normal + vec3(1)) / 2.0;
+     for(auto const& l: lights) {
+       const vec3 r = _point - l.position;
+       diffuse_specular += l.color * (m_d * dot(_normal, r) + m_s * pow(dot(r, _view), s));
+     }
 
-    return color;
+    return diffuse_specular;
 }
 
 //-----------------------------------------------------------------------------

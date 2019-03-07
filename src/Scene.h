@@ -44,7 +44,7 @@ public:
     *   @param[in] _ray passed Ray
     *   @param[in] _depth holds the information, how many times the `_ray` had been reflected. Goes from 0 to max_depth. Should be used for recursive function call.
     *   @return    color
-    **/ 
+    **/
     vec3  trace(const Ray& _ray, int _depth);
 
     /// Computes the closest intersection point between a ray and all objects in the scene.
