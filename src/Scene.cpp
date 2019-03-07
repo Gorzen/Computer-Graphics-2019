@@ -93,7 +93,6 @@ vec3 Scene::trace(const Ray& _ray, int _depth)
     // compute local Phong lighting (ambient+diffuse+specular)
     vec3 color = lighting(point, normal, -_ray.direction, object->material);
 
-
     /** \todo
      * Compute reflections by recursive ray tracing:
      * - check whether `object` is reflective by checking its `material.mirror`
@@ -103,7 +102,20 @@ vec3 Scene::trace(const Ray& _ray, int _depth)
      * - check whether your recursive algorithm reflects the ray `max_depth` times
      */
 
-    return color;
+     //If material is not reflective
+     if (object->material.mirror <= 0.0) return color;
+
+     //Compute reflections
+     double alpha = object->material.mirror;
+     double epsilon = 1e-5;
+     vec3 point_offset = point + epsilon * normal;
+
+     Ray reflect_ray = Ray(point_offset, reflect(_ray.direction, normal));
+     const vec3 recursive_color = trace(reflect_ray, _depth+1);
+
+     color = (1-alpha) * color + alpha * recursive_color;
+
+     return color;
 }
 
 //-----------------------------------------------------------------------------
@@ -152,11 +164,10 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       Ray shadow_ray = Ray(point_offset, r_l);
       Object_ptr a;
       vec3 b;
-      vec3 c;
       double intersect_distance;
 
       // Shadow
-      if (!intersect(shadow_ray, a, b, c, intersect_distance) || intersect_distance > distance(l.position, _point)) {
+      if (!intersect(shadow_ray, a, b, b, intersect_distance) || intersect_distance > distance(l.position, _point)) {
         // Diffuse
         if(dot(_normal, r_l) >= 0) {
           color += l.color * m_d * dot(_normal, r_l);
