@@ -139,31 +139,36 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
     const vec3 m_s = _material.specular;
     const double s = _material.shininess;
 
-    // Diffuse, sepcular and ambient
+    // Ambient color
     vec3 color = i_a * m_a;
 
     for(Light const& l: lights) {
       const vec3 r_l = normalize(l.position - _point);
 
-      if(dot(_normal, r_l) >= 0) {
-        color += l.color * m_d * dot(_normal, r_l);
-        const vec3 r = mirror(r_l, _normal);
+      // Shadow computation
+      double epsilon = 1e-5;
+      vec3 point_offset = _point + epsilon * _normal;
 
-        if(dot(r, _view) >= 0) {
-          color += l.color * m_s * pow(dot(r, _view), s);
+      Ray shadow_ray = Ray(point_offset, r_l);
+      Object_ptr a;
+      vec3 b;
+      vec3 c;
+      double intersect_distance;
+
+      // Shadow
+      if (!intersect(shadow_ray, a, b, c, intersect_distance) || intersect_distance > distance(l.position, _point)) {
+        // Diffuse
+        if(dot(_normal, r_l) >= 0) {
+          color += l.color * m_d * dot(_normal, r_l);
+          const vec3 r = mirror(r_l, _normal);
+
+          // Specular
+          if(dot(r, _view) >= 0) {
+            color += l.color * m_s * pow(dot(r, _view), s);
+          }
         }
       }
     }
-
-
-     /*for(auto const& l: lights) {
-       const vec3 r_l = normalize(l.position - _point);
-       const vec3 r = reflect(r_l, _normal);
-
-      if(dot(r_l, _normal) >= 0 && dot(r, _view) >= 0) {
-        diffuse_specular += l.color * (m_d * dot(_normal, r_l) + m_s * pow(dot(r, _view), s));
-      }
-    }*/
 
     return color;
 }
