@@ -318,10 +318,10 @@ intersect_triangle(const Triangle&  _triangle,
      */
 
      // Solving equation, done in readme to compute t, alpha, gamma and beta
-     vec3 a = _ray.direction;
-     vec3 b = p0 - p1;
-     vec3 c = p0 - p2;
-     vec3 d = p0 - _ray.origin;
+     const vec3 a = _ray.direction;
+     const vec3 b = p0 - p1;
+     const vec3 c = p0 - p2;
+     const vec3 d = p0 - _ray.origin;
 
      // sol = (t, beta, gamma), see readme for detailed implementation
      vec3 sol;
@@ -332,10 +332,10 @@ intersect_triangle(const Triangle&  _triangle,
       return false;
 
       //Extract solutions
-     double t = sol[0];
-     double beta = sol[1];
-     double gamma = sol[2];
-     double alpha = 1 - beta - gamma;
+     const double t = sol[0];
+     const double beta = sol[1];
+     const double gamma = sol[2];
+     const double alpha = 1 - beta - gamma;
 
      if (alpha < 0 || beta < 0 || gamma < 0 || beta > 1 || gamma > 1)
       return false;
@@ -347,7 +347,12 @@ intersect_triangle(const Triangle&  _triangle,
     // Return normal
     // Check if flat or Phong shading
     if(draw_mode_ == PHONG) {
-      vec3 normal = alpha * p0 + beta * p1 + gamma * p2;
+      printf("hello");
+      const vec3 n0 = vertices_[_triangle.i0].normal;
+      const vec3 n1 = vertices_[_triangle.i1].normal;
+      const vec3 n2 = vertices_[_triangle.i2].normal;
+
+      vec3 normal = alpha * n0 + beta * n1 + gamma * n2;
 
       _intersection_normal = normalize(normal);
     } else {
