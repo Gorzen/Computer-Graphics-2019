@@ -216,8 +216,11 @@ bool Mesh::intersect_bounding_box(const Ray& _ray) const
 
     const double min_x = bb_min_[0];
     const double min_y = bb_min_[1];
+    const double min_z = bb_min_[2];
+
     const double max_x = bb_max_[0];
     const double max_y = bb_max_[1];
+    const double max_z = bb_max_[2];
 
     const vec3 o = _ray.origin;
     const vec3 d = _ray.direction;
@@ -226,7 +229,7 @@ bool Mesh::intersect_bounding_box(const Ray& _ray) const
     float txmax = (max_x - o[0]) / d[0];
 
     if (txmin > txmax) {
-      float temp = txmin;
+      float temp = txmax;
       txmax = txmin;
       txmin = temp;
     }
@@ -235,13 +238,33 @@ bool Mesh::intersect_bounding_box(const Ray& _ray) const
     float tymax = (max_y - o[1]) / d[1];
 
     if (tymin > tymax) {
-      float temp = tymin;
+      float temp = tymax;
       tymax = tymin;
       tymin = temp;
     }
 
-    if ((txmin > tymax) || (tymin > txmax))
+    if ((txmin > tymax) || (tymin > txmax)) {
+        return false;
+    }
+
+    if (tymin > txmin)
+      txmin = tymin;
+
+    if (tymax < txmax)
+      txmax = tymax;
+
+    float tzmin = (min_z - o[2]) / d[2];
+    float tzmax = (max_z - o[2]) / d[2];
+
+    if (tzmin > tzmax) {
+      float temp = tzmax;
+      tzmax = tzmin;
+      tzmin = temp;
+    }
+
+    if ((txmin > tzmax) || (tzmin > txmax)) {
       return false;
+    }
 
     return true;
 }
