@@ -155,6 +155,7 @@ void Mesh::compute_normals()
      // For each triangle, compute the normal of its vertices, depending of their weights.
      for (Triangle& t: triangles_)
      {
+       // The vertices of the triangle
        Vertex& v0 = vertices_[t.i0];
        Vertex& v1 = vertices_[t.i1];
        Vertex& v2 = vertices_[t.i2];
@@ -163,13 +164,16 @@ void Mesh::compute_normals()
        double w1;
        double w2;
 
+       // Compute the weights of this triangle for each vertex
        angleWeights(v0.position, v1.position, v2.position, w0, w1, w2);
 
+       // Add the weighted triangle's normal to the vertex normal
        v0.normal += w0 * t.normal;
        v1.normal += w1 * t.normal;
        v2.normal += w2 * t.normal;
      }
 
+     // Normalize the normals of the vertices
      for (Vertex& v: vertices_)
      {
        v.normal = normalize(v.normal);
@@ -257,6 +261,35 @@ bool Mesh::intersect(const Ray& _ray,
 
 //-----------------------------------------------------------------------------
 
+double matrix_det(vec3 col_1, vec3 col_2, vec3 col_3)
+{
+  return  ( col_1[0] * (col_2[1] * col_3[2] - col_3[1] * col_2[2])
+          - col_2[0] * (col_1[1] * col_3[2] - col_3[1] * col_1[2])
+          - col_3[0] * (col_1[1] * col_2[2] - col_2[1] * col_1[2]));
+}
+
+double solve_cramer_variable(vec3 col_1, vec3 col_2, vec3 col_3, double denominator)
+{
+  return matrix_det(col_1, col_2, col_3) / denominator;
+}
+
+bool solve_cramer(vec3 a, vec3 b, vec3 c, vec3 d, vec3& sol)
+{
+  double denominator = matrix_det(a, b, c);
+
+  if (denominator == 0)
+    return false;
+
+  // See https://en.wikipedia.org/wiki/Cramer%27s_rule#Applications for detailed implementation
+  sol = vec3(
+    solve_cramer_variable(d, b, c, denominator),
+    solve_cramer_variable(a, d, c, denominator),
+    solve_cramer_variable(a, b, d, denominator)
+  );
+
+  return true;
+}
+
 
 bool
 Mesh::
@@ -284,8 +317,44 @@ intersect_triangle(const Triangle&  _triangle,
     * Refer to [Cramer's Rule](https://en.wikipedia.org/wiki/Cramer%27s_rule) to easily solve it.
      */
 
-    return false;
-}
+     // Solving equation, done in readme to compute t, alpha, gamma and beta
+     vec3 a = _ray.direction;
+     vec3 b = p0 - p1;
+     vec3 c = p0 - p2;
+     vec3 d = p0 - _ray.origin;
 
+     // sol = (t, beta, gamma), see readme for detailed implementation
+     vec3 sol;
+
+     _intersection_t = NO_INTERSECTION;
+
+     if(!solve_cramer(a, b, c, d, sol))
+      return false;
+
+      //Extract solutions
+     double t = sol[0];
+     double beta = sol[1];
+     double gamma = sol[2];
+     double alpha = 1 - beta - gamma;
+
+     if (alpha < 0 || beta < 0 || gamma < 0)
+      return false;
+
+    // Return t and intersection point
+    _intersection_t = t;
+    _intersection_point = _ray(t);
+
+    // Return normal
+    // Check if flat or Phong shading
+    if(draw_mode_ == PHONG) {
+      vec3 normal = alpha * p0 + beta * p1 + gamma * p2;
+
+      _intersection_normal = normalize(normal);
+    } else {
+      _intersection_normal = _triangle.normal;
+    }
+
+    return true;
+}
 
 //=============================================================================
