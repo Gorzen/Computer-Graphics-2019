@@ -151,6 +151,29 @@ void Mesh::compute_normals()
      * - Store the vertex normals in the Vertex::normal member variable.
      * - Weigh the normals by their triangles' angles.
      */
+
+     // For each triangle, compute the normal of its vertices, depending of their weights.
+     for (Triangle& t: triangles_)
+     {
+       Vertex& v0 = vertices_[t.i0];
+       Vertex& v1 = vertices_[t.i1];
+       Vertex& v2 = vertices_[t.i2];
+
+       double w0;
+       double w1;
+       double w2;
+
+       angleWeights(v0.position, v1.position, v2.position, w0, w1, w2);
+
+       v0.normal += w0 * t.normal;
+       v1.normal += w1 * t.normal;
+       v2.normal += w2 * t.normal;
+     }
+
+     for (Vertex& v: vertices_)
+     {
+       v.normal = normalize(v.normal);
+     }
 }
 
 
@@ -185,6 +208,8 @@ bool Mesh::intersect_bounding_box(const Ray& _ray) const
     * with all triangles of every mesh in the scene. The bounding boxes are computed
     * in `Mesh::compute_bounding_box()`.
     */
+
+
 
     return true;
 }
