@@ -144,15 +144,6 @@ void Mesh::compute_normals()
         v.normal = vec3(0,0,0);
     }
 
-    /** \todo
-     * In some scenes (e.g the office scene) some objects should be flat
-     * shaded (e.g. the desk) while other objects should be Phong shaded to appear
-     * realistic (e.g. chairs). You have to implement the following:
-     * - Compute vertex normals by averaging the normals of their incident triangles.
-     * - Store the vertex normals in the Vertex::normal member variable.
-     * - Weigh the normals by their triangles' angles.
-     */
-
      // For each triangle, compute the normal of its vertices, depending of their weights.
      for (const Triangle& t: triangles_)
      {
@@ -225,15 +216,18 @@ bool Mesh::intersect_bounding_box(const Ray& _ray) const
     const vec3 o = _ray.origin;
     const vec3 d = _ray.direction;
 
+    // o + td = bb_min or bb_max => t = (bb_min - o) / d
     float txmin = (min_x - o[0]) / d[0];
     float txmax = (max_x - o[0]) / d[0];
 
+    // If the ray comes from the "wrong" direction, swap min and max
     if (txmin > txmax) {
       float temp = txmax;
       txmax = txmin;
       txmin = temp;
     }
 
+    // Same for y coordinates
     float tymin = (min_y - o[1]) / d[1];
     float tymax = (max_y - o[1]) / d[1];
 
@@ -243,6 +237,7 @@ bool Mesh::intersect_bounding_box(const Ray& _ray) const
       tymin = temp;
     }
 
+    // The ray doesn't go through the box
     if ((txmin > tymax) || (tymin > txmax)) {
         return false;
     }
@@ -253,6 +248,7 @@ bool Mesh::intersect_bounding_box(const Ray& _ray) const
     if (tymax < txmax)
       txmax = tymax;
 
+    // Same for z coordinates
     float tzmin = (min_z - o[2]) / d[2];
     float tzmax = (max_z - o[2]) / d[2];
 
@@ -353,20 +349,6 @@ intersect_triangle(const Triangle&  _triangle,
     const vec3& p0 = vertices_[_triangle.i0].position;
     const vec3& p1 = vertices_[_triangle.i1].position;
     const vec3& p2 = vertices_[_triangle.i2].position;
-
-    /** \todo
-    * - intersect _ray with _triangle
-    * - store intersection point in `_intersection_point`
-    * - store ray parameter in `_intersection_t`
-    * - store normal at intersection point in `_intersection_normal`.
-    * - Depending on the member variable `draw_mode_`, use either the triangle
-    *  normal (`Triangle::normal`) or interpolate the vertex normals (`Vertex::normal`).
-    * - return `true` if there is an intersection with t > 0 (in front of the viewer)
-    *
-    * Hint: Rearrange `ray.origin + t*ray.dir = a*p0 + b*p1 + (1-a-b)*p2` to obtain a solvable
-    * system for a, b and t.
-    * Refer to [Cramer's Rule](https://en.wikipedia.org/wiki/Cramer%27s_rule) to easily solve it.
-     */
 
      // Solving equation, done in readme to compute t, alpha, gamma and beta
      const vec3 a = _ray.direction;
