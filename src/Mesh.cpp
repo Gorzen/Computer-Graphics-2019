@@ -263,9 +263,9 @@ bool Mesh::intersect(const Ray& _ray,
 
 double matrix_det(vec3 col_1, vec3 col_2, vec3 col_3)
 {
-  return  ( col_1[0] * (col_2[1] * col_3[2] - col_3[1] * col_2[2])
+  return    col_1[0] * (col_2[1] * col_3[2] - col_3[1] * col_2[2])
           - col_2[0] * (col_1[1] * col_3[2] - col_3[1] * col_1[2])
-          - col_3[0] * (col_1[1] * col_2[2] - col_2[1] * col_1[2]));
+          + col_3[0] * (col_1[1] * col_2[2] - col_2[1] * col_1[2]);
 }
 
 double solve_cramer_variable(vec3 col_1, vec3 col_2, vec3 col_3, double denominator)
@@ -337,7 +337,7 @@ intersect_triangle(const Triangle&  _triangle,
      double gamma = sol[2];
      double alpha = 1 - beta - gamma;
 
-     if (alpha < 0 || beta < 0 || gamma < 0)
+     if (alpha < 0 || beta < 0 || gamma < 0 || beta > 1 || gamma > 1)
       return false;
 
     // Return t and intersection point
