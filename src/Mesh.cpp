@@ -134,6 +134,7 @@ void Mesh::compute_normals()
         const vec3& p0 = vertices_[t.i0].position;
         const vec3& p1 = vertices_[t.i1].position;
         const vec3& p2 = vertices_[t.i2].position;
+
         t.normal = normalize(cross(p1-p0, p2-p0));
     }
 
@@ -153,7 +154,7 @@ void Mesh::compute_normals()
      */
 
      // For each triangle, compute the normal of its vertices, depending of their weights.
-     for (Triangle& t: triangles_)
+     for (const Triangle& t: triangles_)
      {
        // The vertices of the triangle
        Vertex& v0 = vertices_[t.i0];
@@ -213,7 +214,34 @@ bool Mesh::intersect_bounding_box(const Ray& _ray) const
     * in `Mesh::compute_bounding_box()`.
     */
 
+    const double min_x = bb_min_[0];
+    const double min_y = bb_min_[1];
+    const double max_x = bb_max_[0];
+    const double max_y = bb_max_[1];
 
+    const vec3 o = _ray.origin;
+    const vec3 d = _ray.direction;
+
+    float txmin = (min_x - o[0]) / d[0];
+    float txmax = (max_x - o[0]) / d[0];
+
+    if (txmin > txmax) {
+      float temp = txmin;
+      txmax = txmin;
+      txmin = temp;
+    }
+
+    float tymin = (min_y - o[1]) / d[1];
+    float tymax = (max_y - o[1]) / d[1];
+
+    if (tymin > tymax) {
+      float temp = tymin;
+      tymax = tymin;
+      tymin = temp;
+    }
+
+    if ((txmin > tymax) || (tymin > txmax))
+      return false;
 
     return true;
 }
@@ -337,7 +365,7 @@ intersect_triangle(const Triangle&  _triangle,
      const double gamma = sol[2];
      const double alpha = 1 - beta - gamma;
 
-     if (alpha < 0 || beta < 0 || gamma < 0 || beta > 1 || gamma > 1)
+     if (alpha < 0 || beta < 0 || gamma < 0 || beta > 1 || gamma > 1 || t <= 0)
       return false;
 
     // Return t and intersection point
@@ -347,7 +375,6 @@ intersect_triangle(const Triangle&  _triangle,
     // Return normal
     // Check if flat or Phong shading
     if(draw_mode_ == PHONG) {
-      printf("hello");
       const vec3 n0 = vertices_[_triangle.i0].normal;
       const vec3 n1 = vertices_[_triangle.i1].normal;
       const vec3 n2 = vertices_[_triangle.i2].normal;
