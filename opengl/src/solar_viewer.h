@@ -165,6 +165,7 @@ private:
     int  width_, height_;
 
     void rotate_around(vec4& object, float angle1, float angle2, bool translateToOrigin, vec4 translate);
+    vec4 compute_planet_position(float distance, float angle);
 };
 
 

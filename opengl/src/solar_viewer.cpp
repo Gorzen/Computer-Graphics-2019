@@ -66,6 +66,15 @@ Solar_viewer::Solar_viewer(const char* _title, int _width, int _height)
 
 //-----------------------------------------------------------------------------
 
+vec4
+Solar_viewer::
+compute_planet_position(float distance, float angle) {
+  vec4 rotation = vec4(cos(angle * M_PI/180.0), 0, sin(angle * M_PI/180.0), 0);
+
+  return distance * rotation + vec4(0, 0, 0, 1);
+}
+
+
 void
 Solar_viewer::
 rotate_around(vec4& object, float angle1, float angle2, bool translateToOrigin, vec4 translate) {
@@ -247,19 +256,14 @@ void Solar_viewer::update_body_positions() {
      *       is fixed for now.
      * */
 
-     rotate_around(sun_.pos_, 0, sun_.angle_step_orbit_, false, vec4(0,0,0,0));
+     sun_.pos_ = compute_planet_position(sun_.distance_, sun_.angle_orbit_);
+     earth_.pos_ = compute_planet_position(earth_.distance_, earth_.angle_orbit_);
+     venus_.pos_ = compute_planet_position(venus_.distance_, venus_.angle_orbit_);
+     mars_.pos_ = compute_planet_position(mars_.distance_, mars_.angle_orbit_);
+     mercury_.pos_ = compute_planet_position(mercury_.distance_, mercury_.angle_orbit_);
+     moon_.pos_ = compute_planet_position(moon_.distance_, moon_.angle_orbit_);
 
-     rotate_around(mercury_.pos_, 0, mercury_.angle_step_orbit_, false, vec4(0,0,0,0));
-
-     rotate_around(venus_.pos_, 0, venus_.angle_step_orbit_, false, vec4(0,0,0,0));
-
-     rotate_around(earth_.pos_, 0, earth_.angle_step_orbit_, false, vec4(0,0,0,0));
-
-     rotate_around(mars_.pos_, 0, mars_.angle_step_orbit_, false, vec4(0,0,0,0));
-
-     moon_.pos_ = earth_.pos_;
-     moon_.pos_ = mat4::translate(vec3(moon_.distance_, 0, 0)) * moon_.pos_;
-     rotate_around(moon_.pos_, 0, moon_.angle_step_orbit_, true, earth_.pos_);
+     moon_.pos_ += vec4(earth_.pos_[0], earth_.pos_[1], earth_.pos_[2], 0);
 }
 
 //-----------------------------------------------------------------------------
