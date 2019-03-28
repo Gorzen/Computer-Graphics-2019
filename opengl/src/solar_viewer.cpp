@@ -68,6 +68,21 @@ Solar_viewer::Solar_viewer(const char* _title, int _width, int _height)
 
 void
 Solar_viewer::
+rotate_around(vec4& object, float angle1, float angle2, bool translateToOrigin, vec4 translate) {
+  mat4 rot_1 = mat4::rotate_x(angle1);
+  mat4 rot_2 = mat4::rotate_y(angle2);
+
+  if(translateToOrigin) {
+    mat4 tr_Ori = mat4::translate(vec3(-translate[0], -translate[1], -translate[2]));
+    mat4 tr_back = mat4::translate(vec3(translate[0], translate[1], translate[2]));
+    object = tr_back * rot_2 * rot_1 * tr_Ori * object;
+  } else {
+    object = rot_2 * rot_1 * object;
+  }
+}
+
+void
+Solar_viewer::
 keyboard(int key, int scancode, int action, int mods)
 {
     if (action == GLFW_PRESS || action == GLFW_REPEAT)
@@ -92,6 +107,25 @@ keyboard(int key, int scancode, int action, int mods)
              *    - key 9 should increase and key 8 should decrease the `dist_factor_`
              *    - 2.5 < `dist_factor_` < 20.0
              */
+            case GLFW_KEY_9:
+            {
+              std::cout << "Dist factor: " << dist_factor_ << std::endl;
+              dist_factor_++;
+              if(dist_factor_ > 20){
+                dist_factor_ = 20;
+              }
+              break;
+            }
+
+            case GLFW_KEY_8:
+            {
+              std::cout << "Dist factor: " << dist_factor_ << std::endl;
+              dist_factor_--;
+              if(dist_factor_ < 2.5) {
+                dist_factor_ = 2.5;
+              }
+              break;
+            }
 
             case GLFW_KEY_R:
             {
@@ -131,12 +165,16 @@ keyboard(int key, int scancode, int action, int mods)
             }
 
             case GLFW_KEY_C:
+            {
                 curve_display_mode_ = CurveDisplayMode((int(curve_display_mode_) + 1) % int(CURVE_SHOW_NUM_MODES));
                 break;
+            }
             case GLFW_KEY_T:
+            {
                 ship_path_frame_.toggleParallelTransport();
                 std::cout << (ship_path_frame_.usingParallelTransport() ? "enabled" : "diabled") << " parallel transport" << std::endl;
                 break;
+            }
 
             case GLFW_KEY_LEFT:
             {
@@ -208,6 +246,20 @@ void Solar_viewer::update_body_positions() {
      *       and earth's moon. Do not explicitly place the space ship, it's position
      *       is fixed for now.
      * */
+
+     rotate_around(sun_.pos_, 0, sun_.angle_orbit_, false, vec4(0,0,0,0));
+
+     rotate_around(mercury_.pos_, 0, mercury_.angle_orbit_, false, vec4(0,0,0,0));
+
+     rotate_around(venus_.pos_, 0, venus_.angle_orbit_, false, vec4(0,0,0,0));
+
+     rotate_around(earth_.pos_, 0, earth_.angle_orbit_, false, vec4(0,0,0,0));
+
+     rotate_around(mars_.pos_, 0, mars_.angle_orbit_, false, vec4(0,0,0,0));
+
+     moon_.pos_ = earth_.pos_;
+     moon_.pos_ = mat4::translate(vec3(moon_.distance_, 0, 0)) * moon_.pos_;
+     rotate_around(moon_.pos_, 0, moon_.angle_orbit_, true, earth_.pos_);
 }
 
 //-----------------------------------------------------------------------------
@@ -334,18 +386,40 @@ void Solar_viewer::paint()
      *
      *  Hint: planet centers are stored in "Planet::pos_".
      */
-    // For now, view the sun from a fixed position...
-    vec4     eye = vec4(0,0,7,1.0);
-    vec4  center = sun_.pos_;
-    vec4      up = vec4(0,1,0,0);
-    float radius = sun_.radius_;
+    vec4 eye;
+    vec4 center;
+    vec4 up = vec4(0,1,0,0);
+    if(planet_to_look_at_ == NULL){
+      if(in_ship_) {
+        //TODO: Corriger
+        eye = vec4(0,0,7,1.0);
+        center = sun_.pos_;
+        float radius = sun_.radius_;
+
+      } else {
+        eye = vec4(0,0,7,1.0);
+        center = sun_.pos_;
+        float radius = sun_.radius_;
+      }
+    } else {
+      const Planet* pl = planet_to_look_at_;
+      vec4 posi = pl->pos_;
+
+      vec4 eye_pos = vec4(posi[0], posi[1], posi[2] + dist_factor_ * pl->radius_, posi[3]);
+      rotate_around(eye_pos, x_angle_, y_angle_, true, posi);
+      eye = eye_pos;
+
+      center = posi;
+      float radius = pl->radius_;
+      vec4 null = vec4(0,0,0,0);
+      rotate_around(up, x_angle_, y_angle_, false, null);
+    }
     mat4    view = mat4::look_at(vec3(eye), vec3(center), vec3(up));
 
     billboard_x_angle_ = billboard_y_angle_ = 0.0f;
 
     mat4 projection = mat4::perspective(fovy_, (float)width_/(float)height_, near_, far_);
     draw_scene(projection, view);
-
 }
 
 
@@ -392,7 +466,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     sun_shader_.use();
     sun_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     sun_shader_.set_uniform("t", sun_animation_time, true /* Indicate that time parameter is optional;
-                                                             it may be optimized away by the GLSL    compiler if it's unused. */);
+                                                             it may be optimized away by the GLSL compiler if it's unused. */);
     sun_shader_.set_uniform("tex", 0);
     sun_shader_.set_uniform("greyscale", (int)greyscale_);
     sun_.tex_.bind();
@@ -417,6 +491,77 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      *
      *  Hint: See how it is done for the Sun in the code above.
      */
+
+     //Draw the earth_
+     m_matrix = mat4::translate(earth_.pos_) * mat4::rotate_y(earth_.angle_self_) * mat4::scale(earth_.radius_);
+     mv_matrix = _view * m_matrix;
+     mvp_matrix = _projection * mv_matrix;
+     color_shader_.use();
+     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     color_shader_.set_uniform("greyscale", (int)greyscale_);
+     color_shader_.set_uniform("tex", 0);
+     earth_.tex_.bind();
+     unit_sphere_.draw();
+
+     m_matrix = mat4::translate(mercury_.pos_) * mat4::rotate_y(mercury_.angle_self_) * mat4::scale(mercury_.radius_);
+     mv_matrix = _view * m_matrix;
+     mvp_matrix = _projection * mv_matrix;
+     color_shader_.use();
+     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     color_shader_.set_uniform("greyscale", (int)greyscale_);
+     color_shader_.set_uniform("tex", 0);
+     mercury_.tex_.bind();
+     unit_sphere_.draw();
+
+     m_matrix = mat4::translate(mars_.pos_) * mat4::rotate_y(mars_.angle_self_) * mat4::scale(mars_.radius_);
+     mv_matrix = _view * m_matrix;
+     mvp_matrix = _projection * mv_matrix;
+     color_shader_.use();
+     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     color_shader_.set_uniform("greyscale", (int)greyscale_);
+     color_shader_.set_uniform("tex", 0);
+     mars_.tex_.bind();
+     unit_sphere_.draw();
+
+     m_matrix = mat4::translate(venus_.pos_) * mat4::rotate_y(venus_.angle_self_) * mat4::scale(venus_.radius_);
+     mv_matrix = _view * m_matrix;
+     mvp_matrix = _projection * mv_matrix;
+     color_shader_.use();
+     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     color_shader_.set_uniform("greyscale", (int)greyscale_);
+     color_shader_.set_uniform("tex", 0);
+     venus_.tex_.bind();
+     unit_sphere_.draw();
+
+     m_matrix = mat4::translate(stars_.pos_) * mat4::rotate_y(stars_.angle_self_) * mat4::scale(stars_.radius_);
+     mv_matrix = _view * m_matrix;
+     mvp_matrix = _projection * mv_matrix;
+     color_shader_.use();
+     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     color_shader_.set_uniform("greyscale", (int)greyscale_);
+     color_shader_.set_uniform("tex", 0);
+     stars_.tex_.bind();
+     unit_sphere_.draw();
+
+     m_matrix = mat4::translate(moon_.pos_) * mat4::rotate_y(moon_.angle_self_) * mat4::scale(moon_.radius_);
+     mv_matrix = _view * m_matrix;
+     mvp_matrix = _projection * mv_matrix;
+     color_shader_.use();
+     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     color_shader_.set_uniform("greyscale", (int)greyscale_);
+     color_shader_.set_uniform("tex", 0);
+     moon_.tex_.bind();
+     unit_sphere_.draw();
+
+     m_matrix = mat4::translate(ship_.pos_) * mat4::rotate_y(ship_.angle_) * mat4::scale(ship_.radius_);
+     mv_matrix = _view * m_matrix;
+     mvp_matrix = _projection * mv_matrix;
+     color_shader_.use();
+     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     color_shader_.set_uniform("greyscale", (int)greyscale_);
+     color_shader_.set_uniform("tex", 0);
+     ship_.tex_.bind();
+     unit_sphere_.draw();
 
     // check for OpenGL errors
     glCheckError();
