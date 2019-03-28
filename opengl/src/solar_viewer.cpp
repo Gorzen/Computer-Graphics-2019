@@ -247,19 +247,19 @@ void Solar_viewer::update_body_positions() {
      *       is fixed for now.
      * */
 
-     rotate_around(sun_.pos_, 0, sun_.angle_orbit_, false, vec4(0,0,0,0));
+     rotate_around(sun_.pos_, 0, sun_.angle_step_orbit_, false, vec4(0,0,0,0));
 
-     rotate_around(mercury_.pos_, 0, mercury_.angle_orbit_, false, vec4(0,0,0,0));
+     rotate_around(mercury_.pos_, 0, mercury_.angle_step_orbit_, false, vec4(0,0,0,0));
 
-     rotate_around(venus_.pos_, 0, venus_.angle_orbit_, false, vec4(0,0,0,0));
+     rotate_around(venus_.pos_, 0, venus_.angle_step_orbit_, false, vec4(0,0,0,0));
 
-     rotate_around(earth_.pos_, 0, earth_.angle_orbit_, false, vec4(0,0,0,0));
+     rotate_around(earth_.pos_, 0, earth_.angle_step_orbit_, false, vec4(0,0,0,0));
 
-     rotate_around(mars_.pos_, 0, mars_.angle_orbit_, false, vec4(0,0,0,0));
+     rotate_around(mars_.pos_, 0, mars_.angle_step_orbit_, false, vec4(0,0,0,0));
 
      moon_.pos_ = earth_.pos_;
      moon_.pos_ = mat4::translate(vec3(moon_.distance_, 0, 0)) * moon_.pos_;
-     rotate_around(moon_.pos_, 0, moon_.angle_orbit_, true, earth_.pos_);
+     rotate_around(moon_.pos_, 0, moon_.angle_step_orbit_, true, earth_.pos_);
 }
 
 //-----------------------------------------------------------------------------
