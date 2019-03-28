@@ -38,8 +38,8 @@ public:
     /// set the time for every update
     void time_step(float _days)
     {
-        angle_orbit_  += _days * angle_step_orbit_;
-        angle_self_ += _days * angle_step_self_;
+        angle_orbit_ = fmod(angle_orbit_ + _days * angle_step_orbit_, 360.0);
+        angle_self_  = fmod(angle_self_  + _days * angle_step_self_,  360.0);
     }
 
     /// the current position of the planet
