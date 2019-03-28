@@ -66,18 +66,13 @@ Solar_viewer::Solar_viewer(const char* _title, int _width, int _height)
 
 //-----------------------------------------------------------------------------
 
-vec4
-Solar_viewer::
-compute_planet_position(float distance, float angle) {
+vec4 compute_planet_position(float distance, float angle) {
   vec4 rotation = vec4(cos(angle * M_PI/180.0), 0, sin(angle * M_PI/180.0), 0);
 
   return distance * rotation + vec4(0, 0, 0, 1);
 }
 
-
-void
-Solar_viewer::
-rotate_around(vec4& object, float angle1, float angle2, bool translateToOrigin, vec4 translate) {
+void rotate_around(vec4& object, float angle1, float angle2, bool translateToOrigin, vec4 translate) {
   mat4 rot_1 = mat4::rotate_x(angle1);
   mat4 rot_2 = mat4::rotate_y(angle2);
 
