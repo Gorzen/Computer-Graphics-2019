@@ -390,15 +390,15 @@ void Solar_viewer::paint()
     vec4 up = vec4(0,1,0,0);
     if(planet_to_look_at_ == NULL){
       if(in_ship_) {
-        //TODO: Corriger
-        eye = vec4(0,0,7,1.0);
-        center = sun_.pos_;
-        float radius = sun_.radius_;
+        vec3 direction = normalize(vec3(ship_.direction_[0], ship_.direction_[1], ship_.direction_[2]));
+        vec3 pos = vec3(ship_.pos_[0], ship_.pos_[1], ship_.pos_[2]);
+        pos = pos + 0.003 * vec3(0, 1, 0) - 0.03 * direction;
+        eye = vec4(pos[0], pos[1], pos[2], 1.0);
+        center = eye + ship_.direction_;
 
       } else {
         eye = vec4(0,0,7,1.0);
         center = sun_.pos_;
-        float radius = sun_.radius_;
       }
     } else {
       const Planet* pl = planet_to_look_at_;
@@ -560,7 +560,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      color_shader_.set_uniform("greyscale", (int)greyscale_);
      color_shader_.set_uniform("tex", 0);
      ship_.tex_.bind();
-     unit_sphere_.draw();
+     ship_.draw();
 
     // check for OpenGL errors
     glCheckError();
