@@ -392,10 +392,11 @@ void Solar_viewer::paint()
       if(in_ship_) {
         vec3 direction = normalize(vec3(ship_.direction_[0], ship_.direction_[1], ship_.direction_[2]));
         vec3 pos = vec3(ship_.pos_[0], ship_.pos_[1], ship_.pos_[2]);
-        pos = pos + 0.003 * vec3(0, 1, 0) - 0.03 * direction;
+        pos = pos + 0.005 * vec3(0, 1, 0) - 0.05 * direction;
         eye = vec4(pos[0], pos[1], pos[2], 1.0);
-        center = eye + ship_.direction_;
+        center = ship_.pos_;
 
+        rotate_around(eye, 0, y_angle_, true, ship_.pos_);
       } else {
         eye = vec4(0,0,7,1.0);
         center = sun_.pos_;
