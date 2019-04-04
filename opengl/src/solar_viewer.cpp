@@ -403,6 +403,11 @@ void Solar_viewer::paint()
     }
     mat4    view = mat4::look_at(vec3(eye), vec3(center), vec3(up));
 
+    /** \todo Orient the billboard used to display the sun's glow
+     *  Update billboard_x_andle_ and billboard_y_angle_ so that the billboard plane
+     *  drawn to produce the sun's halo is orthogonal to the view vector for
+     *  the sun's center.
+     */
     billboard_x_angle_ = billboard_y_angle_ = 0.0f;
 
     mat4 projection = mat4::perspective(fovy_, (float)width_/(float)height_, near_, far_);
@@ -536,6 +541,25 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      ship_.tex_.bind();
      ship_.draw();
 
+
+     /** \todo Switch from using color_shader_ to the fancier shaders you'll
+      * implement in this assignment:
+      *      mercury, venus, moon, mars, ship: phong_shader_
+      *      earth: earth_shader_
+      *      stars, sunglow: still use color_shader_
+      *  You'll need to make sure all the GLSL uniform variables are set. For
+      *  Phong shading, you need to pass in the modelview matrix, the normal transformation
+      *  matrix, and light position in addition to the color_shader_ parameters.
+      */
+
+     /** \todo Render the sun's halo here using the "color_shader_"
+     *   - Construct a model matrix that scales the billboard to 3 times the
+     *     sun's radius and orients it according to billboard_x_angle_ and
+     *     billboard_y_angle_
+     *   - Bind the texture for and draw sunglow_
+     **/
+
+     
     // check for OpenGL errors
     glCheckError();
 }
