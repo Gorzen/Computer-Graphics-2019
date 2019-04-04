@@ -403,12 +403,16 @@ void Solar_viewer::paint()
     }
     mat4    view = mat4::look_at(vec3(eye), vec3(center), vec3(up));
 
-    /** \todo Orient the billboard used to display the sun's glow
-     *  Update billboard_x_andle_ and billboard_y_angle_ so that the billboard plane
-     *  drawn to produce the sun's halo is orthogonal to the view vector for
-     *  the sun's center.
-     */
-    billboard_x_angle_ = billboard_y_angle_ = 0.0f;
+  /** \todo Orient the billboard used to display the sun's glow
+    *  Update billboard_x_andle_ and billboard_y_angle_ so that the billboard plane
+    *  drawn to produce the sun's halo is orthogonal to the view vector for
+    *  the sun's center.
+    */
+
+    vec3 direction = normalize(vec3(eye[0], eye[1], eye[2]));
+
+    billboard_x_angle_ = asin(-direction[1]) * 180.0/M_PI;
+    billboard_y_angle_ = atan2(direction[0], direction[2]) * 180.0/M_PI;
 
     mat4 projection = mat4::perspective(fovy_, (float)width_/(float)height_, near_, far_);
     draw_scene(projection, view);
@@ -468,10 +472,10 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      m_matrix = mat4::translate(earth_.pos_) * mat4::rotate_y(earth_.angle_self_) * mat4::scale(earth_.radius_);
      mv_matrix = _view * m_matrix;
      mvp_matrix = _projection * mv_matrix;
-     color_shader_.use();
-     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-     color_shader_.set_uniform("greyscale", (int)greyscale_);
-     color_shader_.set_uniform("tex", 0);
+     phong_shader_.use();
+     phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     phong_shader_.set_uniform("greyscale", (int)greyscale_);
+     phong_shader_.set_uniform("tex", 0);
      earth_.tex_.bind();
      unit_sphere_.draw();
 
@@ -479,10 +483,10 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      m_matrix = mat4::translate(mercury_.pos_) * mat4::rotate_y(mercury_.angle_self_) * mat4::scale(mercury_.radius_);
      mv_matrix = _view * m_matrix;
      mvp_matrix = _projection * mv_matrix;
-     color_shader_.use();
-     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-     color_shader_.set_uniform("greyscale", (int)greyscale_);
-     color_shader_.set_uniform("tex", 0);
+     phong_shader_.use();
+     phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     phong_shader_.set_uniform("greyscale", (int)greyscale_);
+     phong_shader_.set_uniform("tex", 0);
      mercury_.tex_.bind();
      unit_sphere_.draw();
 
@@ -490,10 +494,10 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      m_matrix = mat4::translate(mars_.pos_) * mat4::rotate_y(mars_.angle_self_) * mat4::scale(mars_.radius_);
      mv_matrix = _view * m_matrix;
      mvp_matrix = _projection * mv_matrix;
-     color_shader_.use();
-     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-     color_shader_.set_uniform("greyscale", (int)greyscale_);
-     color_shader_.set_uniform("tex", 0);
+     phong_shader_.use();
+     phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     phong_shader_.set_uniform("greyscale", (int)greyscale_);
+     phong_shader_.set_uniform("tex", 0);
      mars_.tex_.bind();
      unit_sphere_.draw();
 
@@ -501,10 +505,10 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      m_matrix = mat4::translate(venus_.pos_) * mat4::rotate_y(venus_.angle_self_) * mat4::scale(venus_.radius_);
      mv_matrix = _view * m_matrix;
      mvp_matrix = _projection * mv_matrix;
-     color_shader_.use();
-     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-     color_shader_.set_uniform("greyscale", (int)greyscale_);
-     color_shader_.set_uniform("tex", 0);
+     phong_shader_.use();
+     phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     phong_shader_.set_uniform("greyscale", (int)greyscale_);
+     phong_shader_.set_uniform("tex", 0);
      venus_.tex_.bind();
      unit_sphere_.draw();
 
@@ -512,10 +516,10 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      m_matrix = mat4::translate(stars_.pos_) * mat4::rotate_y(stars_.angle_self_) * mat4::scale(stars_.radius_);
      mv_matrix = _view * m_matrix;
      mvp_matrix = _projection * mv_matrix;
-     color_shader_.use();
-     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-     color_shader_.set_uniform("greyscale", (int)greyscale_);
-     color_shader_.set_uniform("tex", 0);
+     phong_shader_.use();
+     phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     phong_shader_.set_uniform("greyscale", (int)greyscale_);
+     phong_shader_.set_uniform("tex", 0);
      stars_.tex_.bind();
      unit_sphere_.draw();
 
@@ -523,10 +527,10 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      m_matrix = mat4::translate(moon_.pos_) * mat4::rotate_y(moon_.angle_self_) * mat4::scale(moon_.radius_);
      mv_matrix = _view * m_matrix;
      mvp_matrix = _projection * mv_matrix;
-     color_shader_.use();
-     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-     color_shader_.set_uniform("greyscale", (int)greyscale_);
-     color_shader_.set_uniform("tex", 0);
+     phong_shader_.use();
+     phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     phong_shader_.set_uniform("greyscale", (int)greyscale_);
+     phong_shader_.set_uniform("tex", 0);
      moon_.tex_.bind();
      unit_sphere_.draw();
 
@@ -541,6 +545,29 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      ship_.tex_.bind();
      ship_.draw();
 
+     /** \todo Render the sun's halo here using the "color_shader_"
+     *   - Construct a model matrix that scales the billboard to 3 times the
+     *     sun's radius and orients it according to billboard_x_angle_ and
+     *     billboard_y_angle_
+     *   - Bind the texture for and draw sunglow_
+     **/
+
+     //Draw billboard
+     m_matrix = mat4::rotate_y(billboard_y_angle_) * mat4::rotate_x(billboard_x_angle_) * mat4::scale(1.85);
+     mv_matrix = _view * m_matrix;
+     mvp_matrix = _projection * mv_matrix;
+     color_shader_.use();
+     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     color_shader_.set_uniform("greyscale", (int)greyscale_);
+     color_shader_.set_uniform("tex", 0);
+     sunglow_.tex_.bind();
+
+     glEnable(GL_BLEND);
+     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+     sunglow_.draw();
+
+     glDisable(GL_BLEND);
 
      /** \todo Switch from using color_shader_ to the fancier shaders you'll
       * implement in this assignment:
@@ -552,14 +579,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
       *  matrix, and light position in addition to the color_shader_ parameters.
       */
 
-     /** \todo Render the sun's halo here using the "color_shader_"
-     *   - Construct a model matrix that scales the billboard to 3 times the
-     *     sun's radius and orients it according to billboard_x_angle_ and
-     *     billboard_y_angle_
-     *   - Bind the texture for and draw sunglow_
-     **/
 
-     
     // check for OpenGL errors
     glCheckError();
 }

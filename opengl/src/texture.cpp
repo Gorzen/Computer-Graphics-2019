@@ -12,6 +12,8 @@
 #include <cassert>
 #include <algorithm>
 #include "lodepng.h"
+#include <stdio.h>
+#include <math.h>
 
 //=============================================================================
 
@@ -100,12 +102,33 @@ bool Texture::createSunBillboardTexture()
     int height = 900;
     img.resize(width*height * 4);
 
+    /** \todo Set up the texture for the sun billboard.
+    *   - Draw an opaque circle with a 150 pixel radius in its middle
+    *   - Outside that circle the texture should become more and more transparent to mimic a nice glow effect
+    *   - Make sure that your texture is fully transparent at its borders to avoid seeing visible edges
+    *   - Experiment with the color and with how fast you change the transparency until the effect satisfies you
+    **/
+
     for (int col = 0; col < width; ++col) {
         for (int row = 0; row < height; ++row) {
-            img[(row * width + col) * 4 + 0] = 255; // R
-            img[(row * width + col) * 4 + 1] = 255; // G
-            img[(row * width + col) * 4 + 2] = 255; // B
-            img[(row * width + col) * 4 + 3] = 255; // A
+
+            int x = abs(row - height/2);
+            int y = abs(col - width/2);
+
+            float distance = std::sqrt(x * x + y * y);
+
+            int alpha;
+
+            if(distance <= 150){
+              alpha = 255;
+            } else {
+              alpha =  std::max(0, (int)(-(distance - 150)*255/300 + 255));
+            }
+
+            img[(row * width + col) * 4 + 0] = 252; // R
+            img[(row * width + col) * 4 + 1] = std::min(200, alpha); // G
+            img[(row * width + col) * 4 + 2] = 50; // B
+            img[(row * width + col) * 4 + 3] = alpha; // A
         }
     }
 
