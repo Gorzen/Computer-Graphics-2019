@@ -53,7 +53,7 @@ void main()
 
       float r_dot_v = dot(mirrored, v2f_view);
 
-      if (r_dot_v > 0) {
+      if (r_dot_v < 0) {
         color += I_l * m_s * pow(r_dot_v, shininess);
       }
     }

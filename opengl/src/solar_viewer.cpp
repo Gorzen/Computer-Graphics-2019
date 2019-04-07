@@ -472,11 +472,20 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      m_matrix = mat4::translate(earth_.pos_) * mat4::rotate_y(earth_.angle_self_) * mat4::scale(earth_.radius_);
      mv_matrix = _view * m_matrix;
      mvp_matrix = _projection * mv_matrix;
-     phong_shader_.use();
-     phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-     phong_shader_.set_uniform("greyscale", (int)greyscale_);
-     phong_shader_.set_uniform("tex", 0);
+     earth_shader_.use();
+     earth_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     earth_shader_.set_uniform("modelview_matrix", mv_matrix);
+     earth_shader_.set_uniform("normal_matrix", inverse(transpose(mat3(mv_matrix))));
+     earth_shader_.set_uniform("light_position", light);
+     earth_shader_.set_uniform("greyscale", (int)greyscale_);
+     earth_shader_.set_uniform("day_texture", 0);
+     earth_shader_.set_uniform("night_texture", 1);
+     earth_shader_.set_uniform("cloud_texture", 2);
+     earth_shader_.set_uniform("gloss_texture", 3);
      earth_.tex_.bind();
+     earth_.night_.bind();
+     earth_.cloud_.bind();
+     earth_.gloss_.bind();
      unit_sphere_.draw();
 
      //Draw mercury
@@ -485,6 +494,9 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      mvp_matrix = _projection * mv_matrix;
      phong_shader_.use();
      phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
+     phong_shader_.set_uniform("light_position", light);
+     phong_shader_.set_uniform("normal_matrix", inverse(transpose(mat3(mv_matrix))));
      phong_shader_.set_uniform("greyscale", (int)greyscale_);
      phong_shader_.set_uniform("tex", 0);
      mercury_.tex_.bind();
@@ -496,17 +508,21 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      mvp_matrix = _projection * mv_matrix;
      phong_shader_.use();
      phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
+     phong_shader_.set_uniform("normal_matrix", inverse(transpose(mat3(mv_matrix))));
      phong_shader_.set_uniform("greyscale", (int)greyscale_);
      phong_shader_.set_uniform("tex", 0);
      mars_.tex_.bind();
      unit_sphere_.draw();
 
      //Draw venus
-     m_matrix = mat4::translate(venus_.pos_) * mat4::rotate_y(venus_.angle_self_) * mat4::scale(venus_.radius_);
+     m_matrix =  mat4::translate(venus_.pos_) * mat4::rotate_y(venus_.angle_self_) * mat4::scale(venus_.radius_);
      mv_matrix = _view * m_matrix;
      mvp_matrix = _projection * mv_matrix;
      phong_shader_.use();
      phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
+     phong_shader_.set_uniform("normal_matrix", inverse(transpose(mat3(mv_matrix))));
      phong_shader_.set_uniform("greyscale", (int)greyscale_);
      phong_shader_.set_uniform("tex", 0);
      venus_.tex_.bind();
@@ -516,19 +532,21 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      m_matrix = mat4::translate(stars_.pos_) * mat4::rotate_y(stars_.angle_self_) * mat4::scale(stars_.radius_);
      mv_matrix = _view * m_matrix;
      mvp_matrix = _projection * mv_matrix;
-     phong_shader_.use();
-     phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-     phong_shader_.set_uniform("greyscale", (int)greyscale_);
-     phong_shader_.set_uniform("tex", 0);
+     color_shader_.use();
+     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     color_shader_.set_uniform("greyscale", (int)greyscale_);
+     color_shader_.set_uniform("tex", 0);
      stars_.tex_.bind();
      unit_sphere_.draw();
 
      //Draw moon
-     m_matrix = mat4::translate(moon_.pos_) * mat4::rotate_y(moon_.angle_self_) * mat4::scale(moon_.radius_);
+     m_matrix = mat4::translate(moon_.pos_) * mat4::rotate_y(moon_.angle_self_) * mat4::rotate_y(-moon_.angle_orbit_) * mat4::scale(moon_.radius_);
      mv_matrix = _view * m_matrix;
      mvp_matrix = _projection * mv_matrix;
      phong_shader_.use();
      phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
+     phong_shader_.set_uniform("normal_matrix", inverse(transpose(mat3(mv_matrix))));
      phong_shader_.set_uniform("greyscale", (int)greyscale_);
      phong_shader_.set_uniform("tex", 0);
      moon_.tex_.bind();
