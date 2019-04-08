@@ -62,7 +62,7 @@ void main()
   cloud_color += I_a * m_cloud * n_dot_l;
 
   //Ambiant
-  color += I_a * m_a_day * n_dot_l_mapped + I_a * m_a_night * (1 - n_dot_l_mapped);
+  color += I_a * m_a_day * n_dot_l_mapped + m_a_night * (1 - n_dot_l_mapped);
 
   if (n_dot_l > 0) {
     //Diffuse
