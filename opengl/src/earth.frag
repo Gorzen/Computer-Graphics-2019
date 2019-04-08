@@ -37,6 +37,7 @@ void main()
   * value
    */
   vec3 color = vec3(0.0,0.0,0.0);
+  vec3 cloud_color = vec3(0.0,0.0,0.0);
 
   vec4 v_day = texture(day_texture, v2f_texcoord);
   vec4 v_night = texture(night_texture, v2f_texcoord);
@@ -51,10 +52,14 @@ void main()
   vec3 m_s_day = vec3(1,1,1);
   vec3 m_a_night = v_night.rgb;
   float spec_value = v_gloss.r;
-  float diff_val = v_cloud.r;
+  float cloud_val = v_cloud.r;
 
   float n_dot_l = dot(v2f_normal, v2f_light);
   float n_dot_l_mapped = (n_dot_l + 1)/2.0;
+
+  //Cloud ambiant color
+  vec3 m_cloud = vec3(cloud_val, cloud_val, cloud_val);
+  cloud_color += I_a * m_cloud * n_dot_l;
 
   //Ambiant
   color += I_a * m_a_day * n_dot_l_mapped + I_a * m_a_night * (1 - n_dot_l_mapped);
@@ -62,6 +67,7 @@ void main()
   if (n_dot_l > 0) {
     //Diffuse
     color += I_l * m_d_day * n_dot_l;
+    cloud_color += I_l * m_cloud * n_dot_l;
 
     vec3 mirrored = (2.0 * dot(v2f_normal, v2f_light)) * v2f_normal - v2f_light;
 
@@ -69,9 +75,12 @@ void main()
 
     //Specular
     if (r_dot_v < 0) {
-      color += I_l * m_s_day * pow(r_dot_v, shininess) * spec_value;
+      color += I_l * m_s_day * pow(r_dot_v, shininess) * spec_value * (1 - cloud_val);
     }
   }
+
+  //Linear interpolation between cloud and phong
+  color = color * (1 - cloud_val) + cloud_color * cloud_val;
 
   // convert RGB color to YUV color and use only the luminance
   if (greyscale) color = vec3(0.299*color.r+0.587*color.g+0.114*color.b);
