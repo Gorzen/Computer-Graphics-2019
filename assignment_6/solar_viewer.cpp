@@ -534,7 +534,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      unit_sphere_.draw();
 
      //Draw moon
-     m_matrix = mat4::translate(moon_.pos_) * mat4::rotate_y(moon_.angle_self_) * mat4::rotate_y(-moon_.angle_orbit_) * mat4::scale(moon_.radius_);
+     m_matrix = mat4::translate(moon_.pos_) * mat4::rotate_y(moon_.angle_self_) * mat4::scale(moon_.radius_);
      mv_matrix = _view * m_matrix;
      mvp_matrix = _projection * mv_matrix;
      phong_shader_.use();
