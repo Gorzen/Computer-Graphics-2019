@@ -401,13 +401,7 @@ void Solar_viewer::paint()
       // Rotate up vector the same way
       rotate_around(up, x_angle_, y_angle_, NULL);
     }
-    mat4    view = mat4::look_at(vec3(eye), vec3(center), vec3(up));
-
-  /** \todo Orient the billboard used to display the sun's glow
-    *  Update billboard_x_andle_ and billboard_y_angle_ so that the billboard plane
-    *  drawn to produce the sun's halo is orthogonal to the view vector for
-    *  the sun's center.
-    */
+    mat4 view = mat4::look_at(vec3(eye), vec3(center), vec3(up));
 
     vec3 direction = normalize(vec3(eye[0], eye[1], eye[2]));
 

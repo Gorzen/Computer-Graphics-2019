@@ -102,13 +102,6 @@ bool Texture::createSunBillboardTexture()
     int height = 900;
     img.resize(width*height * 4);
 
-    /** \todo Set up the texture for the sun billboard.
-    *   - Draw an opaque circle with a 150 pixel radius in its middle
-    *   - Outside that circle the texture should become more and more transparent to mimic a nice glow effect
-    *   - Make sure that your texture is fully transparent at its borders to avoid seeing visible edges
-    *   - Experiment with the color and with how fast you change the transparency until the effect satisfies you
-    **/
-
     for (int col = 0; col < width; ++col) {
         for (int row = 0; row < height; ++row) {
 
