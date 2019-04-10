@@ -2,7 +2,8 @@
 title: Procedural Rollercoaster
 ---
 
-![Put a nice picture here](images/demo.jpg){width="300px"}
+![Example of end result](example.jpg){width="300px"}
+(_Image from Roller Tycoon 2_)
 
 # Title and Summary
 
@@ -10,7 +11,7 @@ Rollercoaster built with the "wave function collapse" algorithm. The idea is to 
 
 # Goals and Deliverables
 
-The main goal will be to have a fully connected 3D rollercoaster, with a start and a finish. To this, we could have these expansions :
+The main goal will be to have a fully connectedv 3D rollercoaster, with a start and a finish. To this, we could have these expansions :
 
 - Being able to ride the rollercoaster, from the start to the end, as a first person camera.
 - First generate a terrain procedurally and then building the rollercoaster on it.
@@ -26,4 +27,3 @@ https://github.com/mxgmn/WaveFunctionCollapse
 https://www.youtube.com/watch?v=JO8OW2zg0gY
 http://pcgbook.com/
 https://ieeexplore.ieee.org/document/8627334
-
