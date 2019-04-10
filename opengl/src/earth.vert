@@ -31,10 +31,10 @@ void main()
 
   v2f_texcoord = v_texcoord;
   v2f_normal = normalize(normal_matrix * v_normal);
-  v2f_light = normalize(light_position.rgb);
+  v2f_light = light_position.rgb;
 
   vec4 view4 = modelview_matrix * v_position;
-  v2f_view = normalize(view4.rgb);
+  v2f_view = view4.rgb;
 
   gl_Position = modelview_projection_matrix * v_position;
 

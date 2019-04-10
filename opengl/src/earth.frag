@@ -27,15 +27,6 @@ const vec3  sunlight = vec3(1.0, 0.941, 0.898);
 
 void main()
 {
-  /**
-  *  Implement the Phong shading model (like in the 1st exercise) by using the passed
-  *  variables and write the resulting color to `color`.
-  *  `tex` should be used as material parameter for ambient, diffuse and specular lighting.
-  * Hints:
-  * - The texture(texture, 2d_position) returns a 4-vector (rgba). You can use
-  * `texture(...).r` to get just the red component or `texture(...).rgb` to get a vec3 color
-  * value
-   */
   vec3 color = vec3(0.0,0.0,0.0);
   vec3 cloud_color = vec3(0.0,0.0,0.0);
 
@@ -54,7 +45,9 @@ void main()
   float spec_value = v_gloss.r;
   float cloud_val = v_cloud.r;
 
-  float n_dot_l = dot(v2f_normal, v2f_light);
+  vec3 pos_to_light = normalize(v2f_light - v2f_view);
+
+  float n_dot_l = dot(v2f_normal, pos_to_light);
   float n_dot_l_mapped = (n_dot_l + 1)/2.0;
 
   //Cloud ambiant color
@@ -69,12 +62,12 @@ void main()
     color += I_l * m_d_day * n_dot_l;
     cloud_color += I_l * m_cloud * n_dot_l;
 
-    vec3 mirrored = (2.0 * dot(v2f_normal, v2f_light)) * v2f_normal - v2f_light;
+    vec3 mirrored = (2.0 * dot(v2f_normal, pos_to_light)) * v2f_normal - pos_to_light;
 
-    float r_dot_v = dot(mirrored, v2f_view);
+    float r_dot_v = dot(mirrored, -normalize(v2f_view));
 
     //Specular
-    if (r_dot_v < 0) {
+    if (r_dot_v > 0) {
       color += I_l * m_s_day * pow(r_dot_v, shininess) * spec_value * (1 - cloud_val);
     }
   }
