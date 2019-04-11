@@ -46,6 +46,32 @@ void main()
     ***/
     vec3 color = vec3(0.0f);
 
+    vec3 I_l = light_color;
+    vec3 I_a = light_color;
+    vec3 m_a = diffuse_color;
+    vec3 m_d = diffuse_color;
+    vec3 m_s = specular_color;
+    float s = shininess;
+
+    vec3 pos_to_light = normalize(light_position - v2f_ec_vertex);
+
+    color += I_a * m_a;
+    //if(pos_to_light <= 1.01 *  texture(shadow_map, pos_to_light).r) {
+
+      float n_dot_l = dot(N, pos_to_light);
+      if (n_dot_l > 0) {
+        color += I_l * m_d * n_dot_l;
+
+        vec3 mirrored = (2.0 * dot(N, pos_to_light)) * N - pos_to_light;
+
+        float r_dot_v = dot(mirrored, -normalize(v2f_ec_vertex));
+
+        if (r_dot_v > 0) {
+          color += I_l * m_s * pow(r_dot_v, s);
+        }
+      }
+  //  }
+
     // append the required alpha value
     f_light_contribution = vec4(color, 1.0);
 }

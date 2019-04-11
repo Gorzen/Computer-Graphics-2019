@@ -44,7 +44,42 @@ mat4 ShadowViewer::m_constructLightViewMatrix(size_t li, size_t cube_face) const
     * defined by scene_view_matrix.
     * Hint: use mat4::look_at
     **/
-    return mat4::identity() * scene_view_matrix;
+    //Rotation pour regarder la bonne face + translation à la position de la light
+    vec4 up;
+    vec4 light_pos = m_light[li].position();
+    vec4 center;
+
+    switch (cube_face) {
+      case 0:
+        up = vec4(0, 1, 0, 0);
+        center = vec4(1, 0, 0, 0);
+        break;
+      case 1:
+        up = vec4(0, 1, 0, 0);
+        center = vec4(-1, 0, 0, 0);
+        break;
+      case 2:
+        up = vec4(0, 0, -1, 0); //vec4(-1, 0, 0);
+        center = vec4(0, 1, 0, 0);
+        break;
+      case 3:
+        up = vec4(0, 0, 1, 0); //vec4(-1, 0, 0);
+        center = vec4(0, -1, 0, 0);
+        break;
+      case 4:
+        up = vec4(0, 1, 0, 0);
+        center = vec4(0, 0, 1, 0);
+        break;
+      case 5:
+        up = vec4(0, 1, 0, 0);
+        center = vec4(0, 0, -1, 0);
+        break;
+    }
+
+    center = mat4::rotate_y(m_viewParameters.y_angle) * mat4::rotate_x(m_viewParameters.x_angle) * center + light_pos;
+    up = mat4::rotate_y(m_viewParameters.y_angle)  * mat4::rotate_x(m_viewParameters.x_angle) * up;
+
+    return mat4::look_at(light_pos, vec3(center), vec3(up));
 }
 
 mat4 ShadowViewer::m_constructLightProjectionMatrix() const {
@@ -52,7 +87,8 @@ mat4 ShadowViewer::m_constructLightProjectionMatrix() const {
     * Construct the projection matrix for rendering the scene from the perspective
     * of the light to generate shadow maps.
     **/
-    return mat4::identity();
+
+    return mat4::perspective(90.0f, float(m_width) / float(m_height), 0.1, 6);
 }
 
 void ShadowViewer::m_render_shadow_cubemap(size_t li, const mat4 &plane_m_matrix, const mat4 &mesh_m_matrix) {
@@ -110,10 +146,9 @@ void ShadowViewer::draw(const mat4 &view_matrix, const mat4 &projection_matrix) 
     mat4 mesh_mvp_matrix  = projection_matrix * mesh_mv_matrix;
 
 
-    // \todo Construct the matrices for transforming normals into eye coordinates
-    //       You can paste in your solution from assignment 6.
-    mat3 plane_n_matrix   = mat4::identity();
-    mat3 mesh_n_matrix    = mat4::identity();
+    //Construct the matrices for transforming normals into eye coordinates
+    mat3 plane_n_matrix   = inverse(transpose(mat3(plane_mv_matrix)));
+    mat3 mesh_n_matrix    = inverse(transpose(mat3(mesh_mv_matrix)));
 
     vec3 ambient_light(0.2, 0.2, 0.2),
         plane_diffuse (0.5, 0.5, 0.7), // used as ambient color too
@@ -141,12 +176,35 @@ void ShadowViewer::draw(const mat4 &view_matrix, const mat4 &projection_matrix) 
         * output by our shader to the colors already in the framebuffer.
         * Hint: read the documentation for glBlendFunc
         **/
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE);
 
         m_phong_shader.use();
-        m_shadowMap->bind();
-
         m_phong_shader.set_uniform("shininess", 8.0f, true); // pass 'optional = true' to avoid 'Invalid uniform location'
         m_phong_shader.set_uniform("shadow_map",   0, true); // warnings caused by incomplete shader implementations
+        m_phong_shader.set_uniform("diffuse_color", mesh_diffuse);
+        m_phong_shader.set_uniform("light_position", vec3(mesh_mv_matrix * m_light[li].position()));
+        m_phong_shader.set_uniform("specular_color", mesh_specular);
+        m_phong_shader.set_uniform("light_color", m_light[li].color);
+        m_phong_shader.set_uniform("normal_matrix", mesh_n_matrix);
+        m_phong_shader.set_uniform("modelview_matrix", mesh_mv_matrix);
+        m_phong_shader.set_uniform("modelview_projection_matrix", mesh_mvp_matrix);
+        m_shadowMap->bind();
+        m_quad.draw();
+        m_shadowMap->unbind();
+
+        m_phong_shader.use();
+        m_phong_shader.set_uniform("shininess", 8.0f, true); // pass 'optional = true' to avoid 'Invalid uniform location'
+        m_phong_shader.set_uniform("shadow_map",   0, true); // warnings caused by incomplete shader implementations
+        m_phong_shader.set_uniform("light_position", vec3(plane_mv_matrix * m_light[li].position()));
+        m_phong_shader.set_uniform("light_color", m_light[li].color);
+        m_phong_shader.set_uniform("diffuse_color", plane_diffuse);
+        m_phong_shader.set_uniform("specular_color", plane_specular);
+        m_phong_shader.set_uniform("normal_matrix", plane_n_matrix);
+        m_phong_shader.set_uniform("modelview_matrix", plane_mv_matrix);
+        m_phong_shader.set_uniform("modelview_projection_matrix", plane_mvp_matrix);
+        m_shadowMap->bind();
+        m_mesh->draw();
 
         /** \todo
          * Draw this light's specular and diffuse contribution on the floor
