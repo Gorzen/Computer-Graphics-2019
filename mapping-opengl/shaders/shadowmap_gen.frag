@@ -15,5 +15,5 @@ void main() {
     * Compute the distance from the light to the scene intersection represented
     * by this fragment.
     **/
-    dist = sqrt(v2f_lc_vertex[0]*v2f_lc_vertex[0] + v2f_lc_vertex[1]*v2f_lc_vertex[1] + v2f_lc_vertex[2]*v2f_lc_vertex[2]);
+    dist = distance(v2f_lc_vertex.xyz, vec3(0,0,0));
 }
