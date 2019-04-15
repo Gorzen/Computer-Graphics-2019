@@ -180,30 +180,27 @@ void ShadowViewer::draw(const mat4 &view_matrix, const mat4 &projection_matrix) 
         glBlendFunc(GL_ONE, GL_ONE);
 
         m_phong_shader.use();
-        m_phong_shader.set_uniform("shininess", 8.0f, true); // pass 'optional = true' to avoid 'Invalid uniform location'
-        m_phong_shader.set_uniform("shadow_map",   0, true); // warnings caused by incomplete shader implementations
-        m_phong_shader.set_uniform("diffuse_color", mesh_diffuse);
-        m_phong_shader.set_uniform("light_position", vec3(mesh_mv_matrix * m_light[li].position()));
-        m_phong_shader.set_uniform("specular_color", mesh_specular);
-        m_phong_shader.set_uniform("light_color", m_light[li].color);
-        m_phong_shader.set_uniform("normal_matrix", mesh_n_matrix);
-        m_phong_shader.set_uniform("modelview_matrix", mesh_mv_matrix);
-        m_phong_shader.set_uniform("modelview_projection_matrix", mesh_mvp_matrix);
         m_shadowMap->bind();
-        m_quad.draw();
-        m_shadowMap->unbind();
-
-        m_phong_shader.use();
-        m_phong_shader.set_uniform("shininess", 8.0f, true); // pass 'optional = true' to avoid 'Invalid uniform location'
-        m_phong_shader.set_uniform("shadow_map",   0, true); // warnings caused by incomplete shader implementations
-        m_phong_shader.set_uniform("light_position", vec3(plane_mv_matrix * m_light[li].position()));
-        m_phong_shader.set_uniform("light_color", m_light[li].color);
-        m_phong_shader.set_uniform("diffuse_color", plane_diffuse);
+        m_phong_shader.set_uniform("shininess", 8.0f); // pass 'optional = true' to avoid 'Invalid uniform location'
+        m_phong_shader.set_uniform("shadow_map", 0); // warnings caused by incomplete shader implementations
+        m_phong_shader.set_uniform("diffuse_color",  plane_diffuse);
+        m_phong_shader.set_uniform("light_position", vec3(m_light[li].position()));
         m_phong_shader.set_uniform("specular_color", plane_specular);
+        m_phong_shader.set_uniform("light_color", m_light[li].color);
         m_phong_shader.set_uniform("normal_matrix", plane_n_matrix);
         m_phong_shader.set_uniform("modelview_matrix", plane_mv_matrix);
         m_phong_shader.set_uniform("modelview_projection_matrix", plane_mvp_matrix);
-        m_shadowMap->bind();
+        m_quad.draw();
+
+        m_phong_shader.set_uniform("shininess", 8.0f); // pass 'optional = true' to avoid 'Invalid uniform location'
+        m_phong_shader.set_uniform("shadow_map", 0); // warnings caused by incomplete shader implementations
+        m_phong_shader.set_uniform("light_position", vec3(m_light[li].position()));
+        m_phong_shader.set_uniform("light_color", m_light[li].color);
+        m_phong_shader.set_uniform("diffuse_color", mesh_diffuse);
+        m_phong_shader.set_uniform("specular_color", mesh_specular);
+        m_phong_shader.set_uniform("normal_matrix", mesh_n_matrix);
+        m_phong_shader.set_uniform("modelview_matrix", mesh_mv_matrix);
+        m_phong_shader.set_uniform("modelview_projection_matrix", mesh_mvp_matrix);
         m_mesh->draw();
 
         /** \todo
