@@ -53,7 +53,7 @@ void main()
 
     vec3 pos_to_light = normalize(light_position - v2f_ec_vertex);
 
-    if(distance(light_position, v2f_ec_vertex) <= 1.01 *  texture(shadow_map, light_position - v2f_ec_vertex).r) {
+    if(length(light_position - v2f_ec_vertex) <= 1.01f *  texture(shadow_map, -pos_to_light).r) {
       float n_dot_l = dot(N, pos_to_light);
       if (n_dot_l > 0) {
         color += I_l * m_d * n_dot_l;

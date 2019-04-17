@@ -87,8 +87,8 @@ mat4 ShadowViewer::m_constructLightProjectionMatrix() const {
     * Construct the projection matrix for rendering the scene from the perspective
     * of the light to generate shadow maps.
     **/
-
-    return mat4::perspective(90.0f, float(m_width) / float(m_height), 0.1, 6);
+    //tan(float(m_height) / (2.0f * 6.0f)) * 2.0f
+    return mat4::perspective(90.0f, 1.0f, 0.1f, 6.0f);
 }
 
 void ShadowViewer::m_render_shadow_cubemap(size_t li, const mat4 &plane_m_matrix, const mat4 &mesh_m_matrix) {
@@ -184,7 +184,7 @@ void ShadowViewer::draw(const mat4 &view_matrix, const mat4 &projection_matrix) 
         m_phong_shader.set_uniform("shininess", 8.0f); // pass 'optional = true' to avoid 'Invalid uniform location'
         m_phong_shader.set_uniform("shadow_map", 0); // warnings caused by incomplete shader implementations
         m_phong_shader.set_uniform("diffuse_color",  plane_diffuse);
-        m_phong_shader.set_uniform("light_position", vec3(m_light[li].position()));
+        m_phong_shader.set_uniform("light_position", vec3(view_matrix * m_light[li].position()));
         m_phong_shader.set_uniform("specular_color", plane_specular);
         m_phong_shader.set_uniform("light_color", m_light[li].color);
         m_phong_shader.set_uniform("normal_matrix", plane_n_matrix);
@@ -194,7 +194,7 @@ void ShadowViewer::draw(const mat4 &view_matrix, const mat4 &projection_matrix) 
 
         m_phong_shader.set_uniform("shininess", 8.0f); // pass 'optional = true' to avoid 'Invalid uniform location'
         m_phong_shader.set_uniform("shadow_map", 0); // warnings caused by incomplete shader implementations
-        m_phong_shader.set_uniform("light_position", vec3(m_light[li].position()));
+        m_phong_shader.set_uniform("light_position", vec3(view_matrix * m_light[li].position()));
         m_phong_shader.set_uniform("light_color", m_light[li].color);
         m_phong_shader.set_uniform("diffuse_color", mesh_diffuse);
         m_phong_shader.set_uniform("specular_color", mesh_specular);
