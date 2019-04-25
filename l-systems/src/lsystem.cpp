@@ -3,6 +3,7 @@
 #include <stack>
 #include <memory>
 #include <iostream>
+#include <math.h>
 
 /*
 Provided utilities:
@@ -26,7 +27,13 @@ std::string LindenmayerSystemDeterministic::expandSymbol(unsigned char const& sy
 		The rules are in this->rules, see lsystem.h for details.
 	*/
 	// that is a dummy implementation to be replaced
-	return {char(sym)}; // this constructs string from char 
+
+	auto search = (this->rules).find(sym);
+  if (search != (this->rules).end()) {
+      return search->second;
+  } else {
+      return std::string (1, sym);
+  }
 
 	/*
 	You may find useful:
@@ -42,8 +49,13 @@ std::string LindenmayerSystem::expandOnce(std::string const& symbol_sequence) {
 		Perform one iteration of grammar expansion on `symbol_sequence`.
 		Use the expandSymbol method
 	*/
-	return "";
+	std::string s;
 
+	for(char c: symbol_sequence) {
+		s += expandSymbol(c);
+	}
+
+	return s;
 	//============================================================
 }
 
@@ -52,8 +64,12 @@ std::string LindenmayerSystem::expand(std::string const& initial, uint32_t num_i
 		TODO 1.3
 		Perform `num_iters` iterations of grammar expansion (use expandOnce)
 	*/
-	return "";
+	std::string s = initial;
+	for(int i=0; i < num_iters; i++) {
+		s = expandOnce(s);
+	}
 
+	return s;
 	//============================================================
 }
 
@@ -64,8 +80,46 @@ std::vector<Segment> LindenmayerSystem::draw(std::string const& symbols) {
 		The initial position is (0, 0) and the initial direction is "up" (0, 1)
 		Segment is std::pair<vec2, vec2>
 	*/
-	return {};
-	
+
+	std::vector<Segment> list;
+	vec2 p = vec2(0,0);
+	vec2 p0;
+	double d = 90;
+
+  std::stack<vec2> sP;
+  std::stack<double> sD;
+
+	for(char c : symbols) {
+		switch(c) {
+			case '+':
+				d += this->rotation_angle_deg;
+        break;
+      case '-':
+				d -= this->rotation_angle_deg;
+        break;
+      case '[':
+        sP.push(p);
+        sD.push(d);
+        break;
+      case ']':
+        if (!sP.empty() && !sD.empty()) { //Defensive programming :)
+            p = sP.top();
+            sP.pop();
+            d = sD.top();
+            sD.pop();
+        }
+        break;
+			default:
+				p0 = vec2(p);
+				p += vec2(cos(d*M_PI/180), sin(d*M_PI/180));
+        std::pair<vec2, vec2> segment (p0, p);
+				list.push_back(segment);
+        break;
+		}
+	}
+
+	return list;
+
 	//============================================================
 }
 
@@ -76,7 +130,22 @@ std::string LindenmayerSystemStochastic::expandSymbol(unsigned char const& sym) 
 		(stochastic case)
 		The rules are in this->rules, but now these are stochastic rules because this method belongs to the LindenmayerSystemStochastic class, see lsystem.h for details.
 	*/
-	return {char(sym)};
+
+	double prob = dice.roll();
+	auto search = (this->rules).find(sym);
+  if (search != (this->rules).end()) {
+		double total = 0;
+		for(StochasticRule sr : search->second) {
+			if(sr.probability + total >= prob)
+				return sr.expansion;
+			else
+				total += sr.probability;
+		}
+		std::cout << "probabilistic error" << std::endl; // Should never occur
+		return std::string(1, sym);
+  } else {
+      return std::string (1, sym);
+  }
 
 	//============================================================
 }
