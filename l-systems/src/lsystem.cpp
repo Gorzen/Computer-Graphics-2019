@@ -26,7 +26,6 @@ std::string LindenmayerSystemDeterministic::expandSymbol(unsigned char const& sy
 		For a given symbol in the sequence, what should it be replaced with after expansion?
 		The rules are in this->rules, see lsystem.h for details.
 	*/
-	// that is a dummy implementation to be replaced
 
 	auto search = (this->rules).find(sym);
   if (search != (this->rules).end()) {
