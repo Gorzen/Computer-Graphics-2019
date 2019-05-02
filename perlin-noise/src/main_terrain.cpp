@@ -59,13 +59,13 @@ std::shared_ptr<Mesh> build_terrain_mesh(Array2D<float> const& height_map) {
 			 * The XY coordinates are calculated so that the full grid covers
 			 * the square [-0.5, 0.5]^2 in the XY plane.
 			 */
-			 float height = height_map[gx][gy];
+			 float height = height_map(gx,gy);
 
 			 if(height <= WATER_LEVEL) {
 				 height = WATER_LEVEL;
 			 }
 
-			 vertices[idx] = vec3(gx / (grid_size.first - 1.0) - 0.5, gy / (grid_size.second - 1.0) - 0.5, WATER_LEVEL);
+			 vertices[idx] = vec3(float(gx) / (grid_size.first) - 0.5, float(gy) / (grid_size.second) - 0.5, height);
 		}
 	}
 
@@ -82,7 +82,7 @@ std::shared_ptr<Mesh> build_terrain_mesh(Array2D<float> const& height_map) {
 			 int const idx11 = xy_to_v_index(gx + 1, gy + 1);
 
 			 faces.push_back(Mesh::Face(idx00, idx10, idx01));
-			 faces.push_back(Mesh::Face(idx10, idx01, idx11));
+			 faces.push_back(Mesh::Face(idx10, idx11, idx01));
 		}
 	}
 
