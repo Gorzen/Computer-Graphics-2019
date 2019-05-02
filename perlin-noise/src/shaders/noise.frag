@@ -220,7 +220,16 @@ vec3 tex_map(vec2 point) {
 	 * handout. You will need to use your perlin_fbm routine and the
 	 * terrain color constants described above.
 	 */
-	return vec3(0.0f);
+
+	 float s = perlin_fbm(point);
+
+	 if(s <= terrain_water_level){
+		 return terrain_color_water;
+	 } else {
+		 float alpha = s - terrain_water_level;
+
+		 return mix(terrain_color_grass, terrain_color_mountain, alpha);
+	 }
 }
 
 // ==============================================================
@@ -235,7 +244,10 @@ vec3 tex_wood(vec2 point) {
 	 * handout. You will need to use your 2d turbulence routine and the
 	 * wood color constants described above.
 	 */
-	return vec3(0.0f);
+
+	 float alpha = 0.5 * (1 + sin(100 * (length(point) + 0.15 * turbulence(point))));
+
+	 return mix(brown_dark, brown_light, alpha);
 }
 
 
@@ -250,5 +262,9 @@ vec3 tex_marble(vec2 point) {
 	 * handout. You will need to use your 2d turbulence routine and the
 	 * marble color constants described above.
 	 */
-	return vec3(0.0f);
+	 vec2 q = vec2(perlin_fbm(point), perlin_fbm(point + vec2(1.7, 4.6)));
+
+	 float alpha = 0.5 * (1 * perlin_fbm(point + 4 * q));
+
+	 return mix(brown_light, brown_dark, alpha);
 }
