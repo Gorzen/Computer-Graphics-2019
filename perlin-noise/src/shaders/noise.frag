@@ -60,9 +60,20 @@ float perlin_noise_1d(float x) {
 	 * surrounding x, look up their gradients, evaluate the the
 	 * linear functions these gradients describe, and interpolate these
 	 * values using the smooth interolation polygnomial blending_weight_poly.
-	 * Note: gradients in the gradient lookup table are 2D, 
+	 * Note: gradients in the gradient lookup table are 2D,
 	 */
-	return 0.0f;
+	 int c0 = int(floor(x));
+	 int c1 = c0 + 1;
+
+	 vec2 g0 = gradients[hash_func(vec2(c0, 0)) % 12];
+	 vec2 g1 = gradients[hash_func(vec2(c1, 0)) % 12];
+
+	 float phi0 = g0.x * (x - c0);
+	 float phi1 = g1.x * (x - c1);
+
+	 float t = x - c0;
+
+	 return mix(phi0, phi1, blending_weight_poly(t));
 }
 
 float perlin_fbm_1d(float x) {
@@ -132,7 +143,7 @@ float perlin_fbm(vec2 point) {
 	/** \todo
 	 * Implement 2D fBm as described in the handout. Like in the 1D case, you
 	 * should use the constants num_octaves, freq_multiplier, and
-	 * ampl_multiplier. 
+	 * ampl_multiplier.
 	 */
 	return 0.0f;
 }
@@ -195,4 +206,3 @@ vec3 tex_marble(vec2 point) {
 	 */
 	return vec3(0.0f);
 }
-
