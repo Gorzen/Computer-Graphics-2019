@@ -1,0 +1,10 @@
+{
+	"name": "test",
+	"stochastic": false,
+	"initial": "F",
+	"angle_deg": 90.0,
+	"num_iters": 3,
+	"rules": {
+		"F": "FF+F--"
+	}
+}
