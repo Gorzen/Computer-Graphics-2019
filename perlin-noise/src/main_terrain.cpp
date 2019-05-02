@@ -59,7 +59,13 @@ std::shared_ptr<Mesh> build_terrain_mesh(Array2D<float> const& height_map) {
 			 * The XY coordinates are calculated so that the full grid covers
 			 * the square [-0.5, 0.5]^2 in the XY plane.
 			 */
-			vertices[idx] = vec3(0, 0, 0);
+			 float height = height_map[gx][gy];
+
+			 if(height <= WATER_LEVEL) {
+				 height = WATER_LEVEL;
+			 }
+
+			 vertices[idx] = vec3(gx / (grid_size.first - 1.0) - 0.5, gy / (grid_size.second - 1.0) - 0.5, WATER_LEVEL);
 		}
 	}
 
@@ -70,6 +76,13 @@ std::shared_ptr<Mesh> build_terrain_mesh(Array2D<float> const& height_map) {
 			 * Triangulate the grid cell whose lower lefthand corner is grid index (gx, gy)
 			 * (You will need to create two triangles to fill the quad.)
 			 **/
+			 int const idx00 = xy_to_v_index(gx, gy);
+			 int const idx10 = xy_to_v_index(gx + 1, gy);
+			 int const idx01 = xy_to_v_index(gx, gy + 1);
+			 int const idx11 = xy_to_v_index(gx + 1, gy + 1);
+
+			 faces.push_back(Mesh::Face(idx00, idx10, idx01));
+			 faces.push_back(Mesh::Face(idx10, idx01, idx11));
 		}
 	}
 
