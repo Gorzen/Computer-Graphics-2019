@@ -1,5 +1,5 @@
-from Symbol import Rules
-from Symbol import Symbol
+from .Symbol import Rules
+from .Symbol import Symbol
 import numpy as np
 import math
 
