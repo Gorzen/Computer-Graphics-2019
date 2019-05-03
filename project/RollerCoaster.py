@@ -1,6 +1,8 @@
 import os
 import bpy
 from bpy.types import Panel
+import numpy as np
+import math
 
 class RollerCoasterPanel(Panel):
     #Addon informations
@@ -29,7 +31,27 @@ class track_generator_operator(bpy.types.Operator):
     bl_options = {"REGISTER", "UNDO"}
     
     def execute(self, context):
-        points = [(0,0,0), (1, 1, 1), (2, 2, 1), (2, 3, 1), (3, 4, 2)]
+        straight = Symbol(" straight ")
+        right = Symbol(" right ")
+        f = Symbol("F")
+        looping = Symbol(" looping ")
+        
+        p = Symbol("+")
+        m = Symbol("-")
+        u = Symbol(" UP ")
+        d = Symbol(" DOWN ")
+
+        rules = Rules({right : [straight, p, straight],
+                        looping : [straight, u, straight, u, straight, u, straight, u, m, m, m, m, straight, d, straight, d, straight, d, straight, d, straight, d, straight, d, straight, d, straight, d, p, p, p, p, straight, u, straight, u, straight, u, straight, u, straight],
+                        f : [f, p, m, u, f]})
+
+        lsystem = LSystem(rules, math.pi / 4, math.pi / 8, 1, (0.0, 0.0, 0.0))
+
+        symbols = lsystem.expand([looping], 10)
+
+        pos = lsystem.compute_symbols(symbols)
+
+        points = pos
         curveName = 'RollerCoasterCurve'
         tracksName = 'tracks'
         
@@ -113,6 +135,85 @@ def unregister():
     bpy.utils.unregister_class(RollerCoasterPanel)
     bpy.utils.unregister_class(track_generator_operator)
     bpy.utils.unregister_class(delete_operator)
+    
+
+## L-Systems files
+## Import didn't work
+
+class Symbol:
+    def __init__(self, str):
+        self.str = str
+
+    def __str__(self):
+        return self.str
+
+class Rules:
+    def __init__(self, rules):
+        self.rules = rules
+
+    def add(self, symbol, expansion):
+        self.rules.update({symbol : expansion})
+
+    def expandSymbol(self, symbol):
+        return self.rules.get(symbol, [symbol])
+
+    def length(self):
+        return len(self.rules)
+
+
+slope_angle_limit = math.pi / 2
+
+min_phi = math.pi / 2 - slope_angle_limit
+max_phi = math.pi / 2 + slope_angle_limit
+
+class LSystem():
+    def __init__(self, rules, theta_step, phi_step, length, p0):
+        assert phi_step >= 0 and theta_step >= 0
+        self.rules = rules
+        self.theta_step = theta_step
+        self.phi_step = phi_step
+        self.length = length
+        self.p0 = p0
+
+    def expandOnce(self, symbols):
+        s = []
+        for symbol in symbols:
+            s += self.rules.expandSymbol(symbol)
+        return s
+
+    def expand(self, symbols, num_iters):
+        s = symbols.copy()
+        for i in range(num_iters):
+            s = self.expandOnce(s)
+
+        return s
+
+    def compute_symbols(self, symbols):
+        theta = 0.0
+        phi = math.pi / 2
+        p = self.p0
+
+        list_pos = [p]
+
+        for s in symbols:
+            if s.str == "+":
+                theta += self.theta_step
+            elif s.str == "-":
+                theta -= self.theta_step
+            elif s.str == " UP ":
+                phi -= self.phi_step
+                if phi < min_phi:
+                    phi = min_phi
+            elif s.str == " DOWN ":
+                phi += self.phi_step
+                if phi > max_phi:
+                    phi = max_phi
+            else:
+                p = (self.length * math.cos(theta) * math.sin(phi) + p[0], self.length * math.sin(theta) * math.sin(phi) + p[1], self.length * math.cos(phi) + p[2])
+                list_pos.append(p)
+
+        return list_pos
+
     
 #Needed to run the script inside Blender Text Editor
 if __name__ == '__main__':
