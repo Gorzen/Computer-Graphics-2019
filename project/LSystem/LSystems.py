@@ -3,7 +3,7 @@ from .Symbol import Symbol
 import numpy as np
 import math
 
-slope_angle_limit = math.pi / 3
+slope_angle_limit = math.pi / 2
 
 min_phi = math.pi / 2 - slope_angle_limit
 max_phi = math.pi / 2 + slope_angle_limit

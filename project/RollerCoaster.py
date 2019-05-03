@@ -48,10 +48,6 @@ class track_generator_operator(bpy.types.Operator):
     bl_options = {"REGISTER", "UNDO"}
     
     def execute(self, context):
-        importlib.reload(LS.LSystems)
-        importlib.reload(LS.Symbol)
-        importlib.reload(LS.RollerCoasterLSystem)
-        
         points = get_points()
         
         curveName = 'RollerCoasterCurve'
