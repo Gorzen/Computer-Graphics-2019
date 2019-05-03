@@ -45,6 +45,9 @@ Same as 2D FBM but with absolute value
 3. Mix between light brown and dark brown with alpha
 
 ## 5. Terrain
+Added a grid of vertices as said in pdf, uniformly on x and y and z is the height we get from the height_map.
+We add the faces with these vertices, 2 per little square, as said in pdf.
+The shader is the same as in previous assignment we just have to get the material by mixing grass and mountain if we are above sea level and otherwise it's water color.
 
 ### Workload
 - Lucien Michaël Iseli, 274999: **33.33%**
