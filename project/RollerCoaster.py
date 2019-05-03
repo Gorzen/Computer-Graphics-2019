@@ -5,15 +5,21 @@ import numpy as np
 import math
 import os
 import sys
+import importlib
 
 dir = os.path.dirname(bpy.data.filepath)
 if not(dir in sys.path):
     sys.path.append(dir)
-    
-from LSystem.LSystems import LSystem
-from LSystem.Symbol import Symbol
-from LSystem.Symbol import Rules
-from LSystem.RollerCoasterLSystem import get_points
+
+import LSystem as LS
+
+from LSystem.LSystems import *
+from LSystem.Symbol import *
+from LSystem.RollerCoasterLSystem import *
+
+importlib.reload(LS.LSystems)
+importlib.reload(LS.Symbol)
+importlib.reload(LS.RollerCoasterLSystem)
 
 class RollerCoasterPanel(Panel):
     #Addon informations
@@ -42,6 +48,10 @@ class track_generator_operator(bpy.types.Operator):
     bl_options = {"REGISTER", "UNDO"}
     
     def execute(self, context):
+        importlib.reload(LS.LSystems)
+        importlib.reload(LS.Symbol)
+        importlib.reload(LS.RollerCoasterLSystem)
+        
         points = get_points()
         
         curveName = 'RollerCoasterCurve'

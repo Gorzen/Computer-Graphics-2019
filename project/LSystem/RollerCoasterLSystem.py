@@ -20,7 +20,7 @@ def get_points():
 
     lsystem = LSystem(rules, math.pi / 4, math.pi / 8, 1, (0.0, 0.0, 0.0))
 
-    symbols = lsystem.expand([looping], 10)
+    symbols = lsystem.expand([straight], 10)
 
     pos = lsystem.compute_symbols(symbols)
 
