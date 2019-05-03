@@ -26,7 +26,7 @@ Same as 1D but slightly more involved, followed what the pdf said.
 Again, simply rewriting the sum in C++, with a dot product
 
 ### Turbulence
-Same as FBM but with absolute value
+Same as 2D FBM but with absolute value
 
 ## 4. Textures
 ### World

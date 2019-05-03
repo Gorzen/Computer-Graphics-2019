@@ -65,7 +65,7 @@ std::shared_ptr<Mesh> build_terrain_mesh(Array2D<float> const& height_map) {
 				 height = WATER_LEVEL;
 			 }
 
-			 vertices[idx] = vec3(float(gx) / (grid_size.first) - 0.5, float(gy) / (grid_size.second) - 0.5, height);
+			 vertices[idx] = vec3(float(gx) / (grid_size.first - 1.0) - 0.5, float(gy) / (grid_size.second - 1.0) - 0.5, height);
 		}
 	}
 
