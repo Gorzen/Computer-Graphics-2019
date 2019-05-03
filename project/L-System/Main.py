@@ -7,12 +7,14 @@ import sys
 f = Symbol("F")
 p = Symbol("+")
 m = Symbol("-")
+u = Symbol(" UP ")
+d = Symbol(" DOWN ")
 
-rules = Rules({f : [f, f, p, f, m, m]})
+rules = Rules({f : [f, p, u, f]})
 
-lsystem = LSystem(rules, math.pi / 2, 1, (0.0, 0.0))
+lsystem = LSystem(rules, math.pi / 2, math.pi / 8, 1, (0.0, 0.0, 0.0))
 
-symbols = lsystem.expand([f], 3)
+symbols = lsystem.expand([f], 5)
 
 for symbol in symbols:
     sys.stdout.write(str(symbol))

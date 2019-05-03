@@ -3,11 +3,18 @@ from Symbol import Symbol
 import numpy as np
 import math
 
+slope_angle_limit = math.pi / 3
+
+min_phi = math.pi / 2 - slope_angle_limit
+max_phi = math.pi / 2 + slope_angle_limit
+
 class LSystem():
-    def __init__(self, rules, rotation_angle_deg, distance, p0):
+    def __init__(self, rules, theta_step, phi_step, length, p0):
+        assert phi_step >= 0 and theta_step >= 0
         self.rules = rules
-        self.rotation_angle_deg = rotation_angle_deg
-        self.distance = distance
+        self.theta_step = theta_step
+        self.phi_step = phi_step
+        self.length = length
         self.p0 = p0
 
     def expandOnce(self, symbols):
@@ -24,19 +31,27 @@ class LSystem():
         return s
 
     def compute_symbols(self, symbols):
-        d = math.pi/2
+        theta = 0.0
+        phi = math.pi / 2
         p = self.p0
 
         list_pos = [p]
 
         for s in symbols:
             if s.str == "+":
-                d += self.rotation_angle_deg
+                theta += self.theta_step
             elif s.str == "-":
-                d -= self.rotation_angle_deg
+                theta -= self.theta_step
+            elif s.str == " UP ":
+                phi -= self.phi_step
+                if phi < min_phi:
+                    phi = min_phi
+            elif s.str == " DOWN ":
+                phi += self.phi_step
+                if phi > max_phi:
+                    phi = max_phi
             else:
-                p0 = p;
-                p = (math.cos(d) + p0[0], math.sin(d) + p0[1])
+                p = (self.length * math.cos(theta) * math.sin(phi) + p[0], self.length * math.sin(theta) * math.sin(phi) + p[1], self.length * math.cos(phi) + p[2])
                 list_pos.append(p)
 
         return list_pos
