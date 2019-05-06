@@ -7,11 +7,22 @@ title: Procedural Rollercoaster
 
 ## Title and Summary
 
-Rollercoaster built with the "wave function collapse" algorithm. The idea is to have a functional procedurally generated rollercoaster, using predefined tiles and the algorithm mentionned above. Some expansions can be made, for example being able to "ride" it, building it on a procedural terrain, etc.
+Rollercoaster built with stochastic L-systems. The idea is to have a functional procedurally generated rollercoaster, using predefined rules and symbols. We chose the algorithm to be stochastic so that we can have some variations. A path will be generated that goes through a set of generated 3D points and a rail segment will be repeated and curved along the path to be the final track. 
 
 ## Goals and Deliverables
 
-The main goal will be to have a fully connected 3D rollercoaster, with a start and a finish point. The rollercoaster has to coherent, no collision with other roads or the ground. We should be able to ride the rollercoaster as if it was a real one.
+This is the updated proposal after discussion with one teaching assistant.
+
+The minimum deliverable for a passing grade (4.0) would be fully connected and realistic rollercoaster. "Realistic" means a track that is close to a real one and that *could* be realized.
+
+The first extension would be to be able to "ride" the rollercoaster. That means setting up a camera that follows the track from start to end.
+
+The second extension would be to add some twists to the track such as this:
+
+![Example of end result](rollercoaster_twist.jpg)
+(_Example of a rollercoaster performing a twist_)
+
+<!-- The main goal will be to have a fully connected 3D rollercoaster, with a start and a finish point. The rollercoaster has to coherent, no collision with other roads or the ground. We should be able to ride the rollercoaster as if it was a real one.
 
 To this, we could have these extensions (in order of our preferences) for a better grade:
 
@@ -26,7 +37,7 @@ To this, we could have these extensions (in order of our preferences) for a bett
 - Being able to have options to check before the generation of the rollercoaster (eg. maximum/minimum average slope, number of different rollercoasters, max/min length, etc..)
 
 - Get a rasterization of the final scene with OpenGL.
-
+-->
 ## Schedule
 *We plan to add and detail milestones when we will have a better grasp of the whole workload.*
 
@@ -42,11 +53,9 @@ To this, we could have these extensions (in order of our preferences) for a bett
 
 ## Resources
 
-`Blender` to create tiles,
+`Blender` to create the track, and to render the final scene.
 
-`Python` to code the algorithm for Blender,
-
-(Either `OpenGL` or `Blender` to render the scene, depending on if we do the according extension).
+`Python` to code the algorithm for Blender.
 
 https://github.com/mxgmn/WaveFunctionCollapse
 https://www.youtube.com/watch?v=JO8OW2zg0gY
