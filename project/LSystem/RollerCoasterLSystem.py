@@ -4,8 +4,6 @@ from .Symbol import Rules
 import math
 
 def get_points():
-    #loop = [track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track]
-
     straight = Symbol(" straight ")
     right = Symbol(" right ")
     f = Symbol("F")
@@ -19,12 +17,18 @@ def get_points():
     u = Symbol(" UP ")
     d = Symbol(" DOWN ")
 
+    loop = [track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track]
+
+
     rules = Rules({right : [straight, p, straight],
                     looping : [straight, u, straight, u, straight, u, straight, u, m, m, m, m, straight, d, straight, d, straight, d, straight, d, straight, d, straight, d, straight, d, straight, d, p, p, p, p, straight, u, straight, u, straight, u, straight, u, straight],
                     f : [f, p, m, u, f],
                     track : [track, track, u, track, track, d, track, track, d, track, track, u],
-                    t_s :   [[0.5, [t_s, straight, p, straight, t_s]],
-                            [0.5, [t_s, straight, m, straight, t_s]]]})
+                    t_s :   [[0.24, [t_s, straight, p, straight, t_s]],
+                            [0.24, [t_s, straight, m, straight, t_s]],
+                            [0.24, [t_s, straight, u, straight, t_s]],
+                            [0.24, [t_s, straight, d, straight, t_s]],
+                            [0.04, [t_s, straight, looping, straight, t_s]]]})
 
     lsystem = LSystem(rules, math.pi / 4, math.pi / 8, 1, (0.0, 0.0, 0.0))
 
