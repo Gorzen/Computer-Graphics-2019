@@ -17,12 +17,12 @@ The minimum deliverable for a passing grade (4.0) would be fully connected and r
 
 1. The first extension would be to be able to "ride" the roller coaster. That means setting up a camera that follows the track from start to end in order to generate a video.
 
-2. The second extension would be to control the twisting of the rails such that they turn more depending on the speed the wagon. The twisting should be computed to cancel the centrifugal force, i.e. the passengers should remain on their seats.
+2. The second extension would be to control the twisting of the rails such that they turn more depending on the speed of the wagon. The twisting should be computed to cancel the centrifugal force, i.e. the passengers should remain on their seats.
 
 
-<!-- The main goal will be to have a fully connected 3D roller coaster, with a start and a finish point. The roller coaster has to coherent, no collision with other roads or the ground. We should be able to ride the roller coaster as if it was a real one.
+<!-- The main goal will be to have a fully connected 3D roller coaster, with a start and a finish point. The roller coaster has to be coherent and have no collision with other roads or the ground. We should be able to ride the roller coaster as if it was a real one.
 
-To this, we could have these extensions (in order of our preferences) for a better grade:
+To do this, we could have these extensions (in order of our preferences) for a better grade:
 
 - Being able to "ride" the roller coaster, from the start to the end, as a first person camera. For this we would have to create a continuous curve that follows the entire track, we are not sure yet on how hard it will be.
 
