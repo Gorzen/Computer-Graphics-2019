@@ -11,7 +11,7 @@ Roller coaster built with stochastic L-systems. The idea is to have a functional
 
 ## Goals and Deliverables
 
-This is the updated proposal after discussion with one teaching assistant.
+This is the updated proposal after discussion with one teaching assistant and the feedback that said we should rather use L-Systems instead of the wave function collapse algorithm.
 
 The minimum deliverable for a passing grade (4.0) would be fully connected and realistic roller coaster. "Realistic" means a track that is close to a real one and that *could* be realized. I.e the roller coaster loops and doesn't collide with itself.
 
@@ -37,7 +37,6 @@ To do this, we could have these extensions (in order of our preferences) for a b
 - Get a rasterization of the final scene with OpenGL.
 -->
 ## Schedule
-*We plan to add and detail milestones when we will have a better grasp of the whole workload.*
 
 - 29/04 : Fully understand the algorithm and gather some ideas on how to implement it in `Blender` + readings and understanding of external ressources.
 
@@ -45,9 +44,13 @@ To do this, we could have these extensions (in order of our preferences) for a b
 
 - 16/05 : Functionnal rollercoaster track (the goal of the grade 4.0).
 
-- After that : Beginning of extensions (It will depend on which ones we do).
+- 26/05 : Finish both extensions.
 
-- 26/05 : Sell the code + demo to Disneyland.
+- 28/05 : Finish the presentation video.
+
+- 31/05 : Finish webpage (final report) of the project.
+
+- 01/06 : Finally sell the final product to DisneyLand.
 
 ## Resources
 
@@ -55,8 +58,8 @@ To do this, we could have these extensions (in order of our preferences) for a b
 
 `Python` to code the algorithm for Blender.
 
-https://github.com/mxgmn/WaveFunctionCollapse
-https://www.youtube.com/watch?v=JO8OW2zg0gY
+Assignment 8 of the course.
+
 http://pcgbook.com/
 https://ieeexplore.ieee.org/document/8627334
 https://docs.blender.org/api/2.79/
