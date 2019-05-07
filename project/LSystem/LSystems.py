@@ -31,16 +31,34 @@ class LSystem():
         return s
 
     def compute_symbols(self, symbols):
+
         theta = 0.0
         phi = math.pi / 2
         p = self.p0
+        interpolation_n = 8
 
         list_pos = [p]
 
         for s in symbols:
+            if self.length * math.cos(phi) + p[2] < 0 and s.str not in [" UP ", " DOWN "]:
+                phi = math.pi / 2
             if s.str == "+":
                 theta += self.theta_step
             elif s.str == "-":
+                theta -= self.theta_step
+            elif s.str == " +++ ":
+                for i in range(1, interpolation_n + 1):
+                    p = (self.length * math.cos(theta + i*self.theta_step/interpolation_n) * math.sin(phi) + p[0],
+                     self.length * math.sin(theta + i*self.theta_step/interpolation_n) * math.sin(phi) + p[1],
+                     self.length * math.cos(phi) + p[2])
+                    list_pos.append(p)
+                theta += self.theta_step
+            elif s.str == " --- ":
+                for i in range(1, interpolation_n + 1):
+                    p = (self.length * math.cos(theta - i*self.theta_step/interpolation_n) * math.sin(phi) + p[0],
+                     self.length * math.sin(theta - i*self.theta_step/interpolation_n) * math.sin(phi) + p[1],
+                     self.length * math.cos(phi) + p[2])
+                    list_pos.append(p)
                 theta -= self.theta_step
             elif s.str == " UP ":
                 phi -= self.phi_step
