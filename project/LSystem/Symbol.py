@@ -1,8 +1,11 @@
 import random
+import math
 
 class Symbol:
-    def __init__(self, str, stochastic = False):
+    def __init__(self, str, length = 1, angle = math.pi/4, stochastic = False):
         self.str = str
+        self.length = length
+        self.angle = angle
         self.stochastic = stochastic
 
     def __str__(self):

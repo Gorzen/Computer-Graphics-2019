@@ -12,7 +12,7 @@ d = Symbol(" DOWN ")
 
 rules = Rules({f : [f, p, u, f]})
 
-lsystem = LSystem(rules, math.pi / 2, math.pi / 8, 1, (0.0, 0.0, 0.0))
+lsystem = LSystem(rules, (0.0, 0.0, 0.0))
 
 symbols = lsystem.expand([f], 5)
 
