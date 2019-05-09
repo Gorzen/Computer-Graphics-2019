@@ -86,6 +86,9 @@ class track_generator_operator(bpy.types.Operator):
         curveName = 'RollerCoasterCurve'
         tracksName = 'tracks'
 
+    #First delete the existing roller coaster if it exists
+        bpy.ops.roller_coaster.delete_roller_coaster()
+
     #Draw the curve
         curveData = bpy.data.curves.new('trackCurve', type='CURVE')
         curveData.dimensions = '3D'
