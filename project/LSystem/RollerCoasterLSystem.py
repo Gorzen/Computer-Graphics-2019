@@ -9,54 +9,61 @@ except:
 import math
 
 def get_points(iterations):
-    straight = Symbol(" straight ", length = 1)
+    f1 = Symbol("F", length = 1)
+    f5 = Symbol("F", length = 5)
+    f10 = Symbol("F", length = 10)
+
     right = Symbol(" right ")
-    f = Symbol("F", length = 1)
-    track = Symbol(" track ", length = 1)
+    track = Symbol(" track ")
     looping = Symbol(" looping ")
     slope = Symbol(" slope ")
 
     t_s = Symbol(" track stochastic ", stochastic = True)
-    t_s_2 = Symbol(" ss ", stochastic = True)
+    ts_0_0 = Symbol(" ss ", length = 5, stochastic = True)
+    nasty_0_0 = Symbol(" nasty ")
 
     p = Symbol("+", angle = math.pi/4)
     m = Symbol("-", angle = math.pi/4)
     u = Symbol(" UP ", angle = math.pi/8)
     d = Symbol(" DOWN ", angle = math.pi/8)
-    smooth_p = Symbol(" +++ ", length = 1, angle = math.pi/2)
-    smooth_m = Symbol(" --- ", length = 1, angle = math.pi/2)
+    smooth_p = Symbol(" +++ ", angle = math.pi/2)
+    smooth_m = Symbol(" --- ", angle = math.pi/2)
 
-    loop_1 = [straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight]
+    loop_1 = [f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1]
+
+    loop_ts_s = [f5, p, f5, p, ts_0_0, p, f5, p, f5, p, ts_0_0, p, f5, p, f5]
 
     loop = [track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track]
 
     loop_s = [t_s, smooth_p, t_s, t_s, t_s, smooth_p, t_s, t_s, t_s, smooth_p, t_s, t_s, t_s, smooth_p, t_s, t_s, t_s, smooth_p, t_s, t_s, t_s, smooth_p, t_s, t_s, t_s, smooth_p, t_s, t_s, t_s, smooth_p, t_s, t_s]
 
-    fun_twist = [u, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, straight, straight, d, straight, d, straight, m, straight, m, straight, m, straight, m, straight, m, straight, m, straight, m, straight, m, straight, m, straight, m, straight, m, straight, m, straight, p, straight, straight, straight, p, straight, straight, straight]
+    fun_twist = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, f1, f1, d, f1, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, p, f1, f1, f1, p, f1, f1, f1]
 
-    fun_twist_samer = [u, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, p, straight, straight, d, straight, d, straight, m, straight, m, straight, m, straight, m, straight, m, straight, m, straight, m, straight, m, straight, m, straight, m, straight, m, straight, m, straight, p, straight, straight, straight, p, straight, straight, straight]
+    fun_twist_samer = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, f1, d, f1, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, p, f1, f1, f1, p, f1, f1, f1]
 
-    rules = Rules({right : [straight, smooth_p, straight],
-                    looping : [straight, u, straight, u, straight, u, straight, u, m, m, m, m, straight, d, straight, d, straight, d, straight, d, straight, d, straight, d, straight, d, straight, d, p, p, p, p, straight, u, straight, u, straight, u, straight, u, straight],
-                    f : [f, p, m, u, f],
+    rules = Rules({right : [f1, smooth_p, f1],
+                    looping : [f1, u, f1, u, f1, u, f1, u, m, m, m, m, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, p, p, p, p, f1, u, f1, u, f1, u, f1, u, f1],
                     slope : [track, track, u, track, track, d, track, track, d, track, track, u],
-                    t_s_2 : [[0.25, [p, p, u, straight, straight, straight, straight, d, m, m, t_s_2, m, m, d, straight, straight, straight, straight, u, p, p]],
-                            [0.25, [t_s_2]],
-                            [0.25, [p, p, t_s_2, m, m, t_s_2, m, m, t_s_2, p, p]],
-                            [0.25, [m, m, t_s_2, p, p, t_s_2, p, p, t_s_2, m, m]]],
+                    ts_0_0 : [[0.25, [p, p, u, f10, d, m, m, ts_0_0, m, m, d, f10, u, p, p]],
+                            [0.25, [p, f1, p, p, f1, p, f1, m, f1, m, ts_0_0, m, f1, m, f1, ts_0_0, f1, m, f1, f1, m, ts_0_0, m, f1, m, f1, p, f1, p, p, p]],
+                            [0.25, [p, p, ts_0_0, m, m, ts_0_0, m, m, ts_0_0, p, p]],
+                            [0.25, [m, m, ts_0_0, p, p, ts_0_0, p, p, ts_0_0, m, m]]],
+                    nasty_0_0 : [p, f1, p, p, f1, p, f1, m, f1, m, ts_0_0, m, f1, m, f1, f1, f1, m, f1, f1, m, f1, m, f1, m, f1, p, f1, p, p, p],
                     t_s :   [[0.1428, [t_s, p, t_s, m]],
                             [0.1428, [t_s, m, t_s, p]],
                             [0.1428, [t_s, smooth_m, t_s, smooth_p]],
-                            [0.1428, [t_s, straight]],
-                            [0.1428, [straight, t_s]],
+                            [0.1428, [t_s, f1]],
+                            [0.1428, [f1, t_s]],
                             [0.1428, [smooth_m, smooth_m, u, smooth_m, smooth_m, smooth_m, d, d, smooth_m, smooth_m, smooth_m]],
-                            [0.1432, [t_s, straight, looping, straight, t_s]]]})
+                            [0.1432, [t_s, f1, looping, f1, t_s]]]})
 
     lsystem = LSystem(rules, (0.0, 0.0, 0.0))
 
-    #symbols = lsystem.expand([p, p, straight, m, m, straight, m, m, straight, p, p], 3)
-    symbols = lsystem.expand([t_s_2], iterations)
+    #symbols = lsystem.expand([p, p, f1, m, m, f1, m, m, f1, p, p], 3)
+    symbols = lsystem.expand(loop_ts_s, iterations)
 
     pos = lsystem.compute_symbols(symbols)
 
     return pos
+
+print(get_points(1))
