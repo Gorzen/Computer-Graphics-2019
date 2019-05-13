@@ -23,7 +23,9 @@ def get_points(iterations):
     nasty_0_0 = Symbol(" nasty ")
 
     p = Symbol("+", angle = math.pi/4)
+	p3 = Symbol("+", angle = math.pi/3)
     m = Symbol("-", angle = math.pi/4)
+	m3 = Symbol("-", angle = math.pi/3)
     u = Symbol(" UP ", angle = math.pi/8)
     d = Symbol(" DOWN ", angle = math.pi/8)
     smooth_p = Symbol(" +++ ", angle = math.pi/2)
@@ -48,6 +50,9 @@ def get_points(iterations):
                             [0.25, [p, f1, p, p, f1, p, f1, m, f1, m, ts_0_0, m, f1, m, f1, ts_0_0, f1, m, f1, f1, m, ts_0_0, m, f1, m, f1, p, f1, p, p, p]],
                             [0.25, [p, p, ts_0_0, m, m, ts_0_0, m, m, ts_0_0, p, p]],
                             [0.25, [m, m, ts_0_0, p, p, ts_0_0, p, p, ts_0_0, m, m]]],
+					ts_small : [[0.33, [p3, f1, f1, f1, f1, m3, f1, f1, f1, m3, f1, f1, f1, f1, p3]],
+							[0.33, [m3, f1, f1, f1, f1, p3, f1, f1, f1, p3, f1, f1, f1, f1, m3]],
+							[0.34, [f1, f1, f1, f1, f1]]],
                     nasty_0_0 : [p, f1, p, p, f1, p, f1, m, f1, m, ts_0_0, m, f1, m, f1, f1, f1, m, f1, f1, m, f1, m, f1, m, f1, p, f1, p, p, p],
                     t_s :   [[0.1428, [t_s, p, t_s, m]],
                             [0.1428, [t_s, m, t_s, p]],
