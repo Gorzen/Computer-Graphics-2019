@@ -10,6 +10,7 @@ import math
 
 def get_points(iterations):
     f1 = Symbol("F", length = 1)
+    f2 = Symbol("F", length = 2)
     f5 = Symbol("F", length = 5)
     f10 = Symbol("F", length = 10)
 
@@ -46,6 +47,8 @@ def get_points(iterations):
     fun_twist = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, f1, f1, d, f1, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, p, f1, f1, f1, p, f1, f1, f1]
 
     fun_twist_samer = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, f1, d, f1, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, p, f1, f1, f1, p, f1, f1, f1]
+    
+    smol_virage = [u, f2, p, f2, p, f2, p, f2, p, f2, d, p, f2, p, f2, d, f1, p, f2, m, f2, m, f2, m, f2, u, m, f2, m, f2, m, f2, m, f2, f1]
 
     rules = Rules({right : [f1, smooth_p, f1],
                     looping : [f1, u, f1, u, f1, u, f1, u, m, m, m, m, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, p, p, p, p, f1, u, f1, u, f1, u, f1, u, f1],
@@ -70,7 +73,7 @@ def get_points(iterations):
     lsystem = LSystem(rules, (0.0, 0.0, 0.0))
 
     #symbols = lsystem.expand([p, p, f1, m, m, f1, m, m, f1, p, p], 3)
-    symbols = lsystem.expand(loop_ts_s_u, iterations)
+    symbols = lsystem.expand(smol_virage, iterations)
 
     pos = lsystem.compute_symbols(symbols)
 
