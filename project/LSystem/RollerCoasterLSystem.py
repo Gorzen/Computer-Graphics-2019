@@ -20,7 +20,6 @@ def get_points(iterations):
     slope = Symbol(" slope ")
 
     t_s = Symbol(" track stochastic ", stochastic = True)
-    ts_small = Symbol(" small track ", stochastic = True)
     ts_0_0 = Symbol(" ss ", length = 5, stochastic = True)
     nasty_0_0 = Symbol(" nasty ")
 
@@ -29,7 +28,9 @@ def get_points(iterations):
     m = Symbol("-", angle = math.pi/4)
     m3 = Symbol("-", angle = math.pi/3)
     u = Symbol(" UP ", angle = math.pi/8)
+    u3 = Symbol(" UP ", angle = math.pi/3)
     d = Symbol(" DOWN ", angle = math.pi/8)
+    d3 = Symbol(" DOWN ", angle = math.pi/3)
     smooth_p = Symbol(" +++ ", angle = math.pi/2)
     smooth_m = Symbol(" --- ", angle = math.pi/2)
 
@@ -47,20 +48,22 @@ def get_points(iterations):
     fun_twist = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, f1, f1, d, f1, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, p, f1, f1, f1, p, f1, f1, f1]
 
     fun_twist_samer = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, f1, d, f1, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, p, f1, f1, f1, p, f1, f1, f1]
-    
+
     smol_virage = [u, f2, p, f2, p, f2, p, f2, p, f2, d, p, f2, p, f2, d, f1, p, f2, m, f2, m, f2, m, f2, u, m, f2, m, f2, m, f2, m, f2, f1]
 
     rules = Rules({right : [f1, smooth_p, f1],
                     looping : [f1, u, f1, u, f1, u, f1, u, m, m, m, m, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, p, p, p, p, f1, u, f1, u, f1, u, f1, u, f1],
                     slope : [track, track, u, track, track, d, track, track, d, track, track, u],
-                    ts_0_0 : [[0.15, [p, p, u, f10, d, m, m, ts_0_0, m, m, d, f10, u, p, p]],
-                            [0.15, [p, p, d, f10, u, m, m, ts_0_0, m, m, u, f10, d, p, p]],
+                    ts_0_0 : [[0.1, [p, p, u, f10, d, m, m, ts_0_0, m, m, d, f10, u, p, p]],
+                            [0.1, [p, p, d, f10, u, m, m, ts_0_0, m, m, u, f10, d, p, p]],
+                            [0.1, [f1, u, f1, u, f1, u, f1, u, m, m, m, m, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, p, p, p, p, f1, u, f1, u, f1, u, f1, u, ts_0_0]],
                             [0.1, [p, f1, p, p, f1, p, f1, m, f1, m, ts_0_0, m, f1, m, f1, ts_0_0, f1, m, f1, f1, m, ts_0_0, m, f1, m, f1, p, f1, p, p, p]],
-                            [0.3, [p, p, ts_0_0, m, m, ts_0_0, m, m, ts_0_0, p, p]],
-                            [0.3, [m, m, ts_0_0, p, p, ts_0_0, p, p, ts_0_0, m, m]]],
-					ts_small : [[0.33, [p3, f1, f1, f1, f1, m3, f1, m3, f1, f1, f1, f1, p3]],
-							[0.33, [m3, f1, f1, f1, f1, p3, f1, p3, f1, f1, f1, f1, m3]],
-							[0.34, [f1, f1, f1, f1, f1]]],
+                            [0.1, [p, p, ts_0_0, m, m, ts_0_0, m, m, ts_0_0, p, p]],
+                            [0.1, [m, m, ts_0_0, p, p, ts_0_0, p, p, ts_0_0, m, m]],
+                            [0.1, [p3, f1, f1, f1, f1, m3, f1, m3, f1, f1, f1, f1, p3]],
+        					[0.1, [m3, f1, f1, f1, f1, p3, f1, p3, f1, f1, f1, f1, m3]],
+        					[0.1, [ts_0_0]],
+                            [0.1, [u3, f1, f1, f1, f1, d3, f1, d3, f1, f1, f1, f1, u3]]],
                     nasty_0_0 : [p, f1, p, p, f1, p, f1, m, f1, m, ts_0_0, m, f1, m, f1, f1, f1, m, f1, f1, m, f1, m, f1, m, f1, p, f1, p, p, p],
                     t_s :   [[0.1428, [t_s, p, t_s, m]],
                             [0.1428, [t_s, m, t_s, p]],
@@ -73,7 +76,7 @@ def get_points(iterations):
     lsystem = LSystem(rules, (0.0, 0.0, 0.0))
 
     #symbols = lsystem.expand([p, p, f1, m, m, f1, m, m, f1, p, p], 3)
-    symbols = lsystem.expand(smol_virage, iterations)
+    symbols = lsystem.expand(loop_ts_s_u, iterations)
 
     pos = lsystem.compute_symbols(symbols)
 
