@@ -107,6 +107,7 @@ class track_generator_operator(bpy.types.Operator):
         scn.objects.active = curveObject
         curveObject.select = True
         bpy.context.object.data.splines[0].order_u = 3
+        bpy.context.object.data.splines[0].use_cyclic_u = True
 
     #Draw the tracks
         #import the tracks and set it active
