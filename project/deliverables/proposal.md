@@ -27,28 +27,23 @@ We have a simple interface in Blender that allows the user to select the number 
 We are currently experimenting on new rules that will make the Roller Coaster less dense on a bigger number of iterations and maybe have a less consistent "style".
 
 ### Preliminary results
-Third example, with 3 iterations.
+First example, with 3 iterations.
 ![Example of generated tracks](images/generated-track-1.png)
-Third example, with 3 iterations.
+Second example, with 3 iterations.
 ![Example of generated tracks](images/generated-track-2.png)
-Third example, with 2 iterations.
+Third example, with 2 iterations. With looping !
 ![Example of generated tracks](images/generated-track-3.png)
-Third example, as a video, to have better 3d perception of the tracks. 3 iterations.
+Fourth example, as a video, to have better 3d perception of the tracks. 3 iterations.
 ![Video example of generated tracks](images/example.mp4)
 
 ## Updated schedule
 - 29/04 : Fully understand the algorithm and gather some ideas on how to implement it in `Blender` + readings and understanding of external ressources.
-
 - 06/05 : Implementation of a simple L-system in python + some basic curve in `Blender`.
-
-- 16/05 : Functionnal rollercoaster track (the goal of the grade 4.0).
-
-- 26/05 : Finish both extensions.
-
+- 16/05 : Functional rollercoaster track (the goal of the grade 4.0). Start the extension 2.
+- 23/05 : Hopefully, finish the extension 2 and start the extension 3.
+- 26/05 : Finish extension 3 if possible. Add simple camera (not part of the extension) that follows the tracks for the video.
 - 28/05 : Finish the presentation video.
-
 - 31/05 : Finish webpage (final report) of the project.
-
 - 01/06 : Finally sell the final product to DisneyLand.
 
 ## Resources

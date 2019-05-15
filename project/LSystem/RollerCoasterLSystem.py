@@ -40,7 +40,6 @@ def get_points(iterations):
 
     loop_ts_s_u = [u, f5, p, f5, p, d, ts_0_0, u, p, f5, d, d, p, f5, p, u, ts_0_0, d, p, f5, p, f5]
 
-
     loop = [track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track, track, p, track, track]
 
     loop_s = [t_s, smooth_p, t_s, t_s, t_s, smooth_p, t_s, t_s, t_s, smooth_p, t_s, t_s, t_s, smooth_p, t_s, t_s, t_s, smooth_p, t_s, t_s, t_s, smooth_p, t_s, t_s, t_s, smooth_p, t_s, t_s, t_s, smooth_p, t_s, t_s]
@@ -57,12 +56,12 @@ def get_points(iterations):
                     ts_0_0 : [[0.1, [p, p, u, f10, d, m, m, ts_0_0, m, m, d, f10, u, p, p]],
                             [0.1, [p, p, d, f10, u, m, m, ts_0_0, m, m, u, f10, d, p, p]],
                             [0.1, [f1, u, f1, u, f1, u, f1, u, m, m, m, m, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, p, p, p, p, f1, u, f1, u, f1, u, f1, u, ts_0_0]],
-                            [0.1, [p, f1, p, p, f1, p, f1, m, f1, m, ts_0_0, m, f1, m, f1, ts_0_0, f1, m, f1, f1, m, ts_0_0, m, f1, m, f1, p, f1, p, p, p]],
+                            [0.05, [p, f1, p, p, f1, p, f1, m, f1, m, ts_0_0, m, f1, m, f1, ts_0_0, f1, m, f1, f1, m, ts_0_0, m, f1, m, f1, p, f1, p, p, p]],
                             [0.1, [p, p, ts_0_0, m, m, ts_0_0, m, m, ts_0_0, p, p]],
                             [0.1, [m, m, ts_0_0, p, p, ts_0_0, p, p, ts_0_0, m, m]],
                             [0.1, [p3, f1, f1, f1, f1, m3, f1, m3, f1, f1, f1, f1, p3]],
         					[0.1, [m3, f1, f1, f1, f1, p3, f1, p3, f1, f1, f1, f1, m3]],
-        					[0.1, [ts_0_0]],
+        					[0.15, [ts_0_0]],
                             [0.1, [u3, f1, f1, f1, f1, d3, f1, d3, f1, f1, f1, f1, u3]]],
                     nasty_0_0 : [p, f1, p, p, f1, p, f1, m, f1, m, ts_0_0, m, f1, m, f1, f1, f1, m, f1, f1, m, f1, m, f1, m, f1, p, f1, p, p, p],
                     t_s :   [[0.1428, [t_s, p, t_s, m]],
