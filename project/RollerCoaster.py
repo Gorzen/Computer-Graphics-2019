@@ -108,6 +108,8 @@ class track_generator_operator(bpy.types.Operator):
         curveObject.select = True
         bpy.context.object.data.splines[0].order_u = 3
         bpy.context.object.data.splines[0].use_cyclic_u = True
+        bpy.context.object.data.twist_mode = 'Z_UP'
+        bpy.context.object.data.use_deform_bounds = True
 
     #Draw the tracks
         #import the tracks and set it active
