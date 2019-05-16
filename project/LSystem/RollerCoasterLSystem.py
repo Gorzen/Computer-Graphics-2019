@@ -68,8 +68,10 @@ def get_points(iterations):
                             [0.075, looping],
                             [0.05, square_p],
                             [0.05, square_m],
-                            [0.1, small_square_p],
-                            [0.1, small_square_m],
+                            [0.05, small_square_p],
+                            [0.05, small_square_m],
+							[0.05, fun_twist],
+							[0.05, fun_twist_2],
                             [0.05, final_turn_p],
         					[0.05, final_turn_m],
                             [0.05, final_slope],
@@ -79,7 +81,7 @@ def get_points(iterations):
                             [0.05, [semi_twist_m]],
                             [0.075, nothing]]})
 
-    start = fun_twist_2
+    start = loop_ts_s_u_8
 
     lsystem = LSystem(rules)
     symbols = lsystem.expand(start, iterations)

@@ -92,7 +92,7 @@ class LSystem():
             vec2 = np.array(next_pos[0:2]) - np.array(pos[0:2])
 
             print("")
-            print(f"{previous_pos} -> {pos} -> {next_pos}")
+            #print(f"{previous_pos} -> {pos} -> {next_pos}")
             print(vec1)
             print(vec2)
 
