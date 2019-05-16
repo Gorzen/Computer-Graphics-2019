@@ -60,8 +60,8 @@ def get_points(iterations):
     final_turn_m = [m3, f3, p3, f2, p3, f3, m3]
     final_slope = [u3, f3, d3, f2, d3, f3, u3]
     nothing = [ts_0_0]
-    fun_twist = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, d, ts_0_0, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m]
-    fun_twist_2 = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, d, ts_0_0, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m]
+    fun_twist = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, d, ts_0_0, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, u]
+    fun_twist_2 = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, d, ts_0_0, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, u]
 
     rules = Rules({ts_0_0 : [[0.1, up_turn],
                             [0.1, down_turn],
