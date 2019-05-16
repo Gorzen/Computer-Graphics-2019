@@ -92,14 +92,15 @@ class track_generator_operator(bpy.types.Operator):
     #Draw the curve
         curveData = bpy.data.curves.new('trackCurve', type='CURVE')
         curveData.dimensions = '3D'
-        curveData.resolution_u = 4
+        curveData.resolution_u = 2
 
         curve = curveData.splines.new('NURBS')
         curve.use_endpoint_u = True
         curve.points.add(len(points)-1)
         for i, coord in enumerate(points):
-            x,y,z = coord
+            x,y,z,t = coord
             curve.points[i].co = (x, y, z, 1)
+            curve.points[i].tilt = t
 
         curveObject = bpy.data.objects.new(curveName, curveData)
         scn = bpy.context.scene

@@ -13,7 +13,7 @@ min_phi = math.pi / 2 - slope_angle_limit
 max_phi = math.pi / 2 + slope_angle_limit
 
 class LSystem():
-    def __init__(self, rules, p0):
+    def __init__(self, rules, p0 = (0.0, 0.0, 0.0, 0.0)):
         self.rules = rules
         self.p0 = p0
 
@@ -50,14 +50,14 @@ class LSystem():
                 for i in range(1, interpolation_n + 1):
                     p = (s.length * math.cos(theta + i*s.angle/interpolation_n) * math.sin(phi) + p[0],
                      s.length * math.sin(theta + i*s.angle/interpolation_n) * math.sin(phi) + p[1],
-                     s.length * math.cos(phi) + p[2])
+                     s.length * math.cos(phi) + p[2], p[3])
                     list_pos.append(p)
                 theta += s.angle
             elif s.str == " --- ":
                 for i in range(1, interpolation_n + 1):
                     p = (s.length * math.cos(theta - i*s.angle/interpolation_n) * math.sin(phi) + p[0],
                      s.length * math.sin(theta - i*s.angle/interpolation_n) * math.sin(phi) + p[1],
-                     s.length * math.cos(phi) + p[2])
+                     s.length * math.cos(phi) + p[2], p[3])
                     list_pos.append(p)
                 theta -= s.angle
             elif s.str == " UP ":
@@ -68,8 +68,17 @@ class LSystem():
                 phi += s.angle
                 if phi > max_phi:
                     phi = max_phi
+            elif "TWIST" in s.str:
+                step = math.pi / s.length
+                if "SEMI" not in s.str:
+                    step *= 2
+                if "v" in s.str:
+                    step *= -1
+                for i in range(s.length):
+                    p = (math.cos(theta) * math.sin(phi) + p[0], math.sin(theta) * math.sin(phi) + p[1], math.cos(phi) + p[2], p[3] + step)
+                    list_pos.append(p)
             else:
-                p = (s.length * math.cos(theta) * math.sin(phi) + p[0], s.length * math.sin(theta) * math.sin(phi) + p[1], s.length * math.cos(phi) + p[2])
+                p = (s.length * math.cos(theta) * math.sin(phi) + p[0], s.length * math.sin(theta) * math.sin(phi) + p[1], s.length * math.cos(phi) + p[2], p[3])
                 list_pos.append(p)
 
         return list_pos

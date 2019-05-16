@@ -16,8 +16,8 @@ This is the updated proposal after discussion with one teaching assistant and th
 The minimum deliverable for a passing grade (4.0) would be fully connected and realistic roller coaster. "Realistic" means a track that is close to a real one and that *could* be realized. I.e the roller coaster loops and have somewhat realistic curves.
 
 1. The first extension is the ability to "ride" the roller coaster. That means setting up a camera that follows the track (a bezier curve) from start to end in order to generate a video.
-2. Procedurally assign twisting speeds to certain sections of the roller coaster. Namely stunts similar to looping but the rotation axis it the track's axis.
-3. The second extension is to control the twisting of the rails such that they turn more depending on the speed of the wagon. The twisting should be computed to cancel the centrifugal force, i.e. the passengers should remain on their seats.
+2. Procedurally assign twisting speeds to certain sections of the roller coaster. Namely stunts similar to looping but the rotation axis is the track's axis.
+3. The third extension is to control the twisting of the rails such that they turn more depending on the speed of the wagon. The twisting should be computed to cancel the centrifugal force, i.e. the passengers should remain on their seats.
 
 ## Milestone deliverable
 ### Summary
