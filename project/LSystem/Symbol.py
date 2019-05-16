@@ -27,8 +27,6 @@ class Rules:
     def expandSymbolStochastic(self, symbol):
         expansions = self.rules.get(symbol, [symbol])
 
-        print(expansions)
-
         if expansions == [symbol]:
             return expansions
         else:
@@ -36,7 +34,6 @@ class Rules:
             total = 0.0
 
             for expansion in expansions:
-                print(expansion)
                 if expansion[0] + total >= prob:
                     return expansion[1]
                 else:
