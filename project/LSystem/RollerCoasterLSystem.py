@@ -32,6 +32,8 @@ def get_points(iterations):
 
     ## Stochastic track
     ts_0_0 = Symbol(" ss ", length = 5, stochastic = True)
+    ts_p = Symbol(" ss ", length = 5, stochastic = True)
+    ts_m = Symbol(" ss ", length = 5, stochastic = True)
 
     ## Turning symbols, theta and phi
     p = Symbol("+", angle = math.pi/4)
@@ -50,12 +52,14 @@ def get_points(iterations):
 
     ## Expansion rules
     looping = [f1, u, f1, u, f1, u, f1, u, m, m, m, m, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, p, p, p, p, f1, u, f1, u, f1, u, f1, u, f1]
-    up_turn = [p, p, u, f10, d, m, m, ts_0_0, m, m, d, f10, u, p, p]
-    down_turn = [p, p, d, f10, u, m, m, ts_0_0, m, m, u, f10, d, p, p]
-    square_p = [p, f1, p, p, f1, m, ts_0_0, m, m, ts_0_0, m, m, ts_0_0, m, f1, p, p, f1, p]
-    square_m = [m, f1, m, m, f1, p, ts_0_0, p, p, ts_0_0, p, p, ts_0_0, p, f1, m, m, f1, m]
-    small_square_p = [p, p, ts_0_0, m, m, ts_0_0, m, m, ts_0_0, p, p]
-    small_square_m = [m, m, ts_0_0, p, p, ts_0_0, p, p, ts_0_0, m, m]
+    up_turn_p = [p, p, u, f10, d, m, m, ts_p, m, m, d, f10, u, p, p]
+    up_turn_m = [m, m, u, f10, d, p, p, ts_m, p, p, d, f10, u, m, m]
+    down_turn_p = [p, p, d, f10, u, m, m, ts_p, m, m, u, f10, d, p, p]
+    down_turn_m = [m, m, d, f10, u, p, p, ts_m, p, p, u, f10, d, m, m]
+    square_p = [p, f1, p, p, f1, m, ts_0_0, m, m, ts_p, m, m, ts_p, m, f1, p, p, f1, p]
+    square_m = [m, f1, m, m, f1, p, ts_0_0, p, p, ts_m, p, p, ts_m, p, f1, m, m, f1, m]
+    small_square_p = [p, p, ts_m, m, m, ts_p, m, m, ts_p, p, p]
+    small_square_m = [m, m, ts_p, p, p, ts_p, p, p, ts_p, m, m]
     final_turn_p = [p3, f3, m3, f2, m3, f3, p3]
     final_turn_m = [m3, f3, p3, f2, p3, f3, m3]
     final_slope = [u3, f3, d3, f2, d3, f3, u3]
@@ -63,23 +67,36 @@ def get_points(iterations):
     fun_twist = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, d, ts_0_0, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, u]
     fun_twist_2 = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, d, ts_0_0, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, u]
 
-    rules = Rules({ts_0_0 : [[0.1, up_turn],
-                            [0.1, down_turn],
+    rules = Rules({ts_0_0 : [[0.5, [ts_p]],
+                            [0.5, [ts_m]],
+					ts_p : [[0.1, up_turn_p],
+                            [0.1, down_turn_p],
                             [0.075, looping],
-                            [0.05, square_p],
-                            [0.05, square_m],
-                            [0.05, small_square_p],
-                            [0.05, small_square_m],
-							[0.05, fun_twist],
-							[0.05, fun_twist_2],
+                            [0.15, square_p],
+                            [0.15, small_square_p],
+							[0.06, fun_twist],
+							[0.06, fun_twist_2],
                             [0.05, final_turn_p],
-        					[0.05, final_turn_m],
                             [0.05, final_slope],
-        					[0.05, [twist_p_5]],
-                            [0.05, [twist_m_5]],
+        					[0.04, [twist_p_5]],
+                            [0.04, [twist_m_5]],
                             [0.05, [semi_twist_p]],
                             [0.05, [semi_twist_m]],
-                            [0.075, nothing]]})
+                            [0.025, nothing]],
+					ts_m : [[0.1, up_turn_m],
+                            [0.1, down_turn_m],
+                            [0.075, looping],
+                            [0.15, square_m],
+                            [0.15, small_square_m],
+							[0.06, fun_twist],
+							[0.06, fun_twist_2],
+        					[0.05, final_turn_m],
+                            [0.05, final_slope],
+        					[0.04, [twist_p_5]],
+                            [0.04, [twist_m_5]],
+                            [0.05, [semi_twist_p]],
+                            [0.05, [semi_twist_m]],
+                            [0.025, nothing]]})
 
     start = loop_ts_s_u_8
 
