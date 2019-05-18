@@ -51,7 +51,7 @@ def get_points(iterations):
     loop_ts_s_u_8 = [f2, u, f5, p, f5, p, d, ts_0_0, d, p, f5, p, f5, u, ts_0_0, f2, u, f5, p, f5, p, d, ts_0_0, d, p, f5, p, f5, u, ts_0_0]
 
     ## Expansion rules
-    looping = [f1, u, f1, u, f1, u, f1, u, m, m, m, m, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, p, p, p, p, f1, u, f1, u, f1, u, f1, u, f1]
+    looping = [f1, f1, f1, u, f1, u, f1, u, f1, u, m, m, m, m, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, p, p, p, p, f1, u, f1, u, f1, u, f1, u, f1, f1, f1]
     up_turn_p = [p, p, u, f10, d, m, m, ts_p, m, m, d, f10, u, p, p]
     up_turn_m = [m, m, u, f10, d, p, p, ts_m, p, p, d, f10, u, m, m]
     down_turn_p = [p, p, d, f10, u, m, m, ts_p, m, m, u, f10, d, p, p]
@@ -71,7 +71,7 @@ def get_points(iterations):
                             [0.5, [ts_m]]],
 					ts_p : [[0.1, up_turn_p],
                             [0.1, down_turn_p],
-                            [0.075, looping],
+                            [1.075, looping],
                             [0.15, square_p],
                             [0.15, small_square_p],
 							[0.06, fun_twist],
