@@ -59,8 +59,6 @@ class RollerCoasterPanel(Panel):
         row.label(text='Roller Coaster features')
 
         row = layout.row()
-        row.prop(settings, "loopings", text = 'loopings')
-        row = layout.row()
         row.prop(settings, 'iterations', text = 'Number of iterations')
 
         row = layout.row()
@@ -79,9 +77,8 @@ class track_generator_operator(bpy.types.Operator):
     #Get settings
         settings = context.scene.roller_coaster_settings
         iterations = settings.iterations
-        print(iterations)
 
-        points = get_points(iterations = iterations)
+        points = get_points(iterations)
 
         curveName = 'RollerCoasterCurve'
         tracksName = 'tracks'

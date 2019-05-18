@@ -91,26 +91,19 @@ class LSystem():
             vec1 = np.array(pos[0:2]) - np.array(previous_pos[0:2])
             vec2 = np.array(next_pos[0:2]) - np.array(pos[0:2])
 
-            print("")
-            #print(f"{previous_pos} -> {pos} -> {next_pos}")
-            print(vec1)
-            print(vec2)
 
             vec1 /= np.linalg.norm(vec1)
             vec2 /= np.linalg.norm(vec2)
 
 
             alpha = np.dot(vec1, vec2)
-
-            print(vec1)
-            print(vec2)
-            print(alpha)
-            print("")
-
-            if abs(alpha) > 0.1:
-                new_pos = (pos[0], pos[1], pos[2], pos[3] + alpha)
+            
+            print('alpha: {}'.format(alpha))
+            
+            if abs(alpha) != 1:
+                new_pos = (pos[0], pos[1], pos[2], pos[3] - alpha)
             else:
-                new_pos = pos
+                new_pos = (pos[0], pos[1], pos[2], 0)
 
             previous_pos = new_pos
             twisted_list_pos.append(new_pos)

@@ -68,7 +68,7 @@ def get_points(iterations):
     fun_twist_2 = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, d, ts_0_0, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, u]
 
     rules = Rules({ts_0_0 : [[0.5, [ts_p]],
-                            [0.5, [ts_m]],
+                            [0.5, [ts_m]]],
 					ts_p : [[0.1, up_turn_p],
                             [0.1, down_turn_p],
                             [0.075, looping],
@@ -103,7 +103,7 @@ def get_points(iterations):
     lsystem = LSystem(rules)
     symbols = lsystem.expand(start, iterations)
     pos = lsystem.compute_symbols(symbols)
-    #pos = lsystem.twist_points(pos)
+    pos = lsystem.twist_points(pos)
     return pos
 
 print(get_points(0))
