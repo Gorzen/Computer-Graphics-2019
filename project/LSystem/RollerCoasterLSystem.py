@@ -71,7 +71,7 @@ def get_points(iterations):
                             [0.5, [ts_m]]],
 					ts_p : [[0.1, up_turn_p],
                             [0.1, down_turn_p],
-                            [1.075, looping],
+                            [0.075, looping],
                             [0.15, square_p],
                             [0.15, small_square_p],
 							[0.06, fun_twist],
