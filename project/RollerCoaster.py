@@ -28,10 +28,10 @@ importlib.reload(LS.Symbol)
 importlib.reload(LS.RollerCoasterLSystem)
 
 class RollerCoasterSettings(PropertyGroup):
-    loopings = BoolProperty(
-        name = 'looping',
-        description = 'Enable loopings to appear in the roller coaster',
-        default = True,
+    twisting = BoolProperty(
+        name = 'twisting',
+        description = 'Enable twisting of the rail depending on the speed',
+        default = False,
     )
 
     iterations = IntProperty(
@@ -59,6 +59,9 @@ class RollerCoasterPanel(Panel):
         row.label(text='Roller Coaster features')
 
         row = layout.row()
+        row.prop(settings, 'twisting', text='Realistic tilting')
+
+        row = layout.row()
         row.prop(settings, 'iterations', text = 'Number of iterations')
 
         row = layout.row()
@@ -77,8 +80,9 @@ class track_generator_operator(bpy.types.Operator):
     #Get settings
         settings = context.scene.roller_coaster_settings
         iterations = settings.iterations
+        realistic_twisting = settings.twisting
 
-        points = get_points(iterations)
+        points = get_points(iterations, realistic_twisting)
 
         curveName = 'RollerCoasterCurve'
         tracksName = 'tracks'

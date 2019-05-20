@@ -8,7 +8,7 @@ except:
     from Symbol import Symbol
 import math
 
-def get_points(iterations):
+def get_points(iterations, realistic_twisting = False):
     ### Old parts
     #fun_twist = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, d, ts_0_0, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1]
     #fun_twist_samer = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, f1, d, f1, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, p, f1, f1, f1, p, f1, f1, f1]
@@ -103,7 +103,9 @@ def get_points(iterations):
     lsystem = LSystem(rules)
     symbols = lsystem.expand(start, iterations)
     pos = lsystem.compute_symbols(symbols)
-    pos = lsystem.twist_points(pos)
+    if (realistic_twisting):
+        pos = lsystem.twist_points(pos)
+
     return pos
 
 print(get_points(0))
