@@ -110,5 +110,3 @@ def get_points(iterations, realistic_twisting):
     if (realistic_twisting):
         pos = lsystem.twist_points(pos)
     return pos
-
-print(get_points(0))
