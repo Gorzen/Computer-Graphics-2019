@@ -39,8 +39,10 @@ ts_squares_m = Symbol(" ss ", length = 5, stochastic = True)
 ## Turning symbols, theta and phi
 p = Symbol("+", angle = math.pi/4)
 p3 = Symbol("+", angle = math.pi/3)
+p6 = Symbol("+", angle = math.pi/6)
 m = Symbol("-", angle = math.pi/4)
 m3 = Symbol("-", angle = math.pi/3)
+m6 = Symbol("-", angle = math.pi/6)
 u = Symbol(" UP ", angle = math.pi/8)
 u3 = Symbol(" UP ", angle = math.pi/3)
 d = Symbol(" DOWN ", angle = math.pi/8)
@@ -52,7 +54,7 @@ loop_ts_s_u = [u, f5, p, f5, p, d, ts_0_0, u, p, f5, d, d, p, f5, p, u, ts_0_0, 
 loop_ts_s_u_8 = [f2, u, f5, p, f5, p, d, ts_0_0, d, p, f5, p, f5, u, ts_0_0, f2, u, f5, p, f5, p, d, ts_0_0, d, p, f5, p, f5, u, ts_0_0]
 
 ## Expansion rules
-looping = [f1, f1, f1, u, f1, u, f1, u, f1, u, m, m, m, m, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, p, p, p, p, f1, u, f1, u, f1, u, f1, u, f1, f1, f1]
+looping = [f1, f1, p6, f1, f1, u, f1, u, f1, u, f1, u, m, m, m, m, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, p, p, p, p, m6, f1, u, f1, u, f1, u, p6, f1, u, m6, f2]
 up_turn_p = [p, p, u, f10, d, m, m, ts_0_0, m, m, d, f10, u, p, p]
 up_turn_m = [m, m, u, f10, d, p, p, ts_0_0, p, p, d, f10, u, m, m]
 down_turn_p = [p, p, d, f10, u, m, m, ts_0_0, m, m, u, f10, d, p, p]
