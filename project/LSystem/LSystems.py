@@ -79,8 +79,30 @@ class LSystem():
                 list_pos.append(p)
 
         return list_pos
+        
+    def compute_velocity(self, list_pos):
+        speed_list = []
+        min_speed = 1
+        g = 0.2
+        friction = 0.8
+        previous_pos = list_pos[0]
+        previous_speed = 0
+        for i, pos in enumerate(list_pos[1:]):
+            h = pos[2] - previous_pos[2]
+            previous_pos = pos
+            if h < 0:
+                speed = 0
+            else:
+                speed = math.sqrt(2*g*h) - friction + previous_speed
+            
+            speed = max(speed, min_speed)
+            speed_list.append(speed)
+            previous_speed = speed
+            
+        return speed_list
 
     def twist_points(self, list_pos):
+        speed_list = self.compute_velocity(list_pos)
         previous_pos = list_pos[0]
 
         twisted_list_pos = [previous_pos]
@@ -94,13 +116,18 @@ class LSystem():
 
             vec1 /= np.linalg.norm(vec1)
             vec2 /= np.linalg.norm(vec2)
+            dot = np.dot(vec1, vec2)
+            if math.isnan(dot):
+                dot = 1
+            print('dot: {}'.format(dot))
 
 
-            alpha = np.dot(vec1, vec2)
+            alpha = math.acos(dot)
             
             print('alpha: {}'.format(alpha))
             
-            if abs(alpha) != 1:
+            if abs(alpha) != 0:
+                alpha *= speed_list[i]
                 new_pos = (pos[0], pos[1], pos[2], pos[3] - alpha)
             else:
                 new_pos = (pos[0], pos[1], pos[2], 0)

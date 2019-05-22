@@ -38,7 +38,7 @@ class RollerCoasterSettings(PropertyGroup):
         name = 'iterations',
         description = 'Number of iterations that the L-System will perform',
         default = 0,
-        min = 0,
+        min = 1,
         max = 10,
     )
 
