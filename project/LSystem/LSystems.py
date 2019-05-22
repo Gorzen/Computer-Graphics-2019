@@ -112,15 +112,14 @@ class LSystem():
 
             vec1 = np.array(pos[0:2]) - np.array(previous_pos[0:2])
             vec2 = np.array(next_pos[0:2]) - np.array(pos[0:2])
-
-
+            
             vec1 /= np.linalg.norm(vec1)
             vec2 /= np.linalg.norm(vec2)
+                    
             dot = np.dot(vec1, vec2)
             if math.isnan(dot):
                 dot = 1
             print('dot: {}'.format(dot))
-
 
             alpha = math.acos(dot)
             
