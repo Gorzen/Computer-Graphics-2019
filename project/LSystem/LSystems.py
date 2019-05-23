@@ -43,20 +43,6 @@ class LSystem():
                 theta += s.angle
             elif s.str == "-":
                 theta -= s.angle
-            elif s.str == " +++ ":
-                for i in range(1, interpolation_n + 1):
-                    p = (s.length * math.cos(theta + i*s.angle/interpolation_n) * math.sin(phi) + p[0],
-                     s.length * math.sin(theta + i*s.angle/interpolation_n) * math.sin(phi) + p[1],
-                     s.length * math.cos(phi) + p[2], p[3])
-                    list_pos.append(p)
-                theta += s.angle
-            elif s.str == " --- ":
-                for i in range(1, interpolation_n + 1):
-                    p = (s.length * math.cos(theta - i*s.angle/interpolation_n) * math.sin(phi) + p[0],
-                     s.length * math.sin(theta - i*s.angle/interpolation_n) * math.sin(phi) + p[1],
-                     s.length * math.cos(phi) + p[2], p[3])
-                    list_pos.append(p)
-                theta -= s.angle
             elif s.str == " UP ":
                 phi -= s.angle
                 if phi < min_phi:
@@ -65,6 +51,20 @@ class LSystem():
                 phi += s.angle
                 if phi > max_phi:
                     phi = max_phi
+            elif s.str == " END ":
+                twist = p[3]
+                step = abs(twist) // (math.pi / 2)
+
+                for i in range(step):
+                    sign = twist / abs(twist)
+
+                    p = (s.length / (step + 1) * math.cos(theta) * math.sin(phi) + p[0], s.length / (step + 1) * math.sin(theta) * math.sin(phi) + p[1], s.length / (step + 1) * math.cos(phi) + p[2], p[3] + sign * math.pi / 2)
+                    list_pos.append(p)
+
+                p = (0, 0, 0, 0)
+                list_pos.append(p)
+
+
             elif "TWIST" in s.str:
                 step = math.pi / s.length
                 if "SEMI" not in s.str:
@@ -79,7 +79,7 @@ class LSystem():
                 list_pos.append(p)
 
         return list_pos
-        
+
     def compute_velocity(self, list_pos):
         speed_list = []
         min_speed = 1
@@ -94,11 +94,11 @@ class LSystem():
                 speed = 0
             else:
                 speed = math.sqrt(2*g*h) - friction + previous_speed
-            
+
             speed = max(speed, min_speed)
             speed_list.append(speed)
             previous_speed = speed
-            
+
         return speed_list
 
     def twist_points(self, list_pos):
@@ -112,19 +112,21 @@ class LSystem():
 
             vec1 = np.array(pos[0:2]) - np.array(previous_pos[0:2])
             vec2 = np.array(next_pos[0:2]) - np.array(pos[0:2])
-            
+
             vec1 /= np.linalg.norm(vec1)
             vec2 /= np.linalg.norm(vec2)
-                    
+
             dot = np.dot(vec1, vec2)
-            if math.isnan(dot):
+            if dot > 1 or math.isnan(dot):
                 dot = 1
+            if dot < -1:
+                dot = -1
             print('dot: {}'.format(dot))
 
             alpha = math.acos(dot)
-            
+
             print('alpha: {}'.format(alpha))
-            
+
             if abs(alpha) != 0:
                 alpha *= speed_list[i]
                 new_pos = (pos[0], pos[1], pos[2], pos[3] - alpha)
