@@ -129,7 +129,7 @@ class LSystem():
                 alpha *= speed_list[i]
                 new_pos = (pos[0], pos[1], pos[2], pos[3] - alpha)
             else:
-                new_pos = (pos[0], pos[1], pos[2], 0)
+                new_pos = (pos[0], pos[1], pos[2], pos[3])
 
             previous_pos = new_pos
             twisted_list_pos.append(new_pos)
