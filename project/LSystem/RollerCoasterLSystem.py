@@ -48,10 +48,13 @@ u3 = Symbol(" UP ", angle = math.pi/3)
 d = Symbol(" DOWN ", angle = math.pi/8)
 d3 = Symbol(" DOWN ", angle = math.pi/3)
 
+end = Symbol(" END ", length = 10)
+
 # RULES
 ## Starting loops
 loop_ts_s_u = [u, f5, p, f5, p, d, ts_0_0, u, p, f5, d, d, p, f5, p, u, ts_0_0, d, p, f5, p, f5]
 loop_ts_s_u_8 = [f2, u, f5, p, f5, p, d, ts_0_0, d, p, f5, p, f5, u, ts_0_0, f2, u, f5, p, f5, p, d, ts_0_0, d, p, f5, p, f5, u, ts_0_0]
+loop_ts_s_u_oct_preserve_twist = [u, f3, d, p, ts_0_0, u, f3, d, p, ts_0_0, d, p, f3, u, ts_0_0, d, p, f3, u, f3, ts_0_0, f2, u, f3, p, d, ts_0_0, u, f3, p, d, ts_0_0, p, d, f3, u, ts_0_0, p, d, f3, u, end]
 
 ## Expansion rules
 looping = [f1, f1, p6, f1, f1, u, f1, u, f1, u, f1, u, m, m, m, m, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, f1, d, p, p, p, p, m6, f1, u, f1, u, f1, u, p6, f1, u, m6, f2]
@@ -67,8 +70,10 @@ final_turn_p = [p3, f3, m3, f2, m3, f3, p3]
 final_turn_m = [m3, f3, p3, f2, p3, f3, m3]
 final_slope = [u3, f3, d3, f2, d3, f3, u3]
 nothing = [ts_0_0]
-fun_twist = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, d, ts_0_0, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, u]
-fun_twist_2 = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, d, ts_0_0, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, u]
+fun_twist_p = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, d, ts_0_0, d, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, u]
+fun_twist_m = [u, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, d, ts_0_0, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, u]
+fun_twist_2_p = [u, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, d, ts_0_0, d, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, f1, p, u]
+fun_twist_2_m = [u, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, d, ts_0_0, d, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, f1, m, u]
 
 rules = Rules({ts_0_0 : [[0.35, [ts_p]],
                         [0.35, [ts_m]],
@@ -77,8 +82,8 @@ rules = Rules({ts_0_0 : [[0.35, [ts_p]],
                 ts_p : [[0.15, up_turn_p],
                         [0.15, down_turn_p],
                         [0.05, looping],
-                        [0.2, fun_twist],
-                        [0.075, fun_twist_2],
+                        [0.2, fun_twist_p],
+                        [0.075, fun_twist_2_p],
                         [0.075, final_turn_p],
                         [0.075, final_slope],
                         [0.04, [twist_p_5]],
@@ -89,8 +94,8 @@ rules = Rules({ts_0_0 : [[0.35, [ts_p]],
                 ts_m : [[0.15, up_turn_m],
                         [0.15, down_turn_m],
                         [0.05, looping],
-                        [0.2, fun_twist],
-                        [0.075, fun_twist_2],
+                        [0.2, fun_twist_m],
+                        [0.075, fun_twist_2_m],
                         [0.075, final_turn_m],
                         [0.075, final_slope],
                         [0.04, [twist_p_5]],
@@ -103,7 +108,7 @@ rules = Rules({ts_0_0 : [[0.35, [ts_p]],
                 ts_squares_m : [[0.5, square_m],
                         [0.5, small_square_m]]})
 
-start = loop_ts_s_u_8
+start = loop_ts_s_u_oct_preserve_twist
 
 lsystem = LSystem(rules)
 

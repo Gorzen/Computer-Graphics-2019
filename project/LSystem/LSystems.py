@@ -53,12 +53,12 @@ class LSystem():
                     phi = max_phi
             elif s.str == " END ":
                 twist = p[3]
-                step = abs(twist) // (math.pi / 2)
+                step = int(abs(twist) // (math.pi / 2))
 
                 for i in range(step):
                     sign = twist / abs(twist)
 
-                    p = (s.length / (step + 1) * math.cos(theta) * math.sin(phi) + p[0], s.length / (step + 1) * math.sin(theta) * math.sin(phi) + p[1], s.length / (step + 1) * math.cos(phi) + p[2], p[3] + sign * math.pi / 2)
+                    p = (s.length / (step + 1) * math.cos(theta) * math.sin(phi) + p[0], s.length / (step + 1) * math.sin(theta) * math.sin(phi) + p[1], s.length / (step + 1) * math.cos(phi) + p[2], p[3] - sign * math.pi / 2)
                     list_pos.append(p)
 
                 p = (0, 0, 0, 0)
@@ -113,17 +113,7 @@ class LSystem():
             vec1 = np.array(pos[0:2]) - np.array(previous_pos[0:2])
             vec2 = np.array(next_pos[0:2]) - np.array(pos[0:2])
 
-            vec1 /= np.linalg.norm(vec1)
-            vec2 /= np.linalg.norm(vec2)
-
-            dot = np.dot(vec1, vec2)
-            if dot > 1 or math.isnan(dot):
-                dot = 1
-            if dot < -1:
-                dot = -1
-            print('dot: {}'.format(dot))
-
-            alpha = math.acos(dot)
+            alpha = compute_angle(vec1, vec2)
 
             print('alpha: {}'.format(alpha))
 
@@ -137,3 +127,21 @@ class LSystem():
             twisted_list_pos.append(new_pos)
 
         return twisted_list_pos
+
+def compute_angle(x, y):
+    dot = x[0] * y[0] + x[1] * y[1]
+    cross = x[0] * y[1] - x[1] * y[0]
+
+    dot = 1 if dot > 1 else dot
+    dot = -1 if dot < -1 else dot
+
+    cross = 1 if cross > 1 else cross
+    cross = -1 if cross < -1 else cross
+
+    #alpha = +- alpha
+    alpha = math.atan2(dot, cross)
+
+    if alpha > math.pi / 2:
+        alpha = alpha - math.pi
+
+    return alpha
