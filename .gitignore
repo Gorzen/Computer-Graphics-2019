@@ -4,3 +4,4 @@ build_debug
 l-systems/out.*
 assignment_0*
 __pycache__
+project/presentation/renders/videos/
