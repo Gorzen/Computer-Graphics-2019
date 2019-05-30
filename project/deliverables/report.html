@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Procedural Roller Coaster</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="icg_report.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header>
+<h1 class="title">Procedural Roller Coaster</h1>
+</header>
+<h1 id="report-group-19">Report Group 19</h1>
+<h2 id="abstract">Abstract</h2>
+<p>We implemented a 3D stochastic L-System procedural roller coaster as a Blender addon. The addon lets the user chose the number of iterations of the L-System and toggle the realistic twisting of the tracks. In addition to that there is a button that performs the next iteration of the L-System (without having to recompute everything from scratch).</p>
+<h2 id="technical-approach">Technical Approach</h2>
+<h3 id="summary">Summary</h3>
+<p>The use of an L-System to build a somewhat realistic roller coaster made us use a few technical implementations. First, we needed a 3D L-System which we took from the assignment 7 of the course and translated it in python. We have implemented different symbols for each possible angle (<span class="math inline">±</span> vertical and <span class="math inline">±</span> horizontal). In addition to that, we need some symbol to compute the distance that the line will have to travel, depending on its angle.</p>
+<p>Then, we wanted to have a stochastic system, so that we could have different result each time. We then added a parameter to the symbols that give the probability that they are chosen at the next iteration (we have to be careful that probabilities sum to 1 !). However, not every symbol has to be stochastic (for example angles, fixed lengths, etc), so that we can build predefined rules and have a track that doesn’t get messed up. Those rules are predefined lists of symbols,that are used to have control on the way the L-System evolve. Furthermore, we can compute with them some tracks that would not happen if there are no rules like those (or with a really really low probability), such as loopings, for example.</p>
+<p>Because the rules where made by us we had complete control over what they had to look like. The main challenge was to start with a track that loops and keep this property after each iteration. This was achieved by designing the rules such that the end point would be at some fixed length in front of the starting point, and the angle at the end point would be constant for these rules. With this, no matter what symbol gets replaced by the stochastic system, the loop property would remain.</p>
+<p>There are then both implemented extensions, where we computed some twists on the tracks, some coming directly from the L-System on a stochastic manner, some based on a physical approach, with the goal to twist tracks depending on the centrifugal force a wagon would get while running it. To do that, we computed the difference of horizontal angle at each step</p>
+<h3 id="problems-encountered">Problems encountered</h3>
+<ul>
+<li>We struggled with Blender in order to make the loopings realistic. Even if they weren’t mandatory it was a personal achievement that we wanted to complete. The problem was that Blender allow us to choose between 3 modes of drawing a curve (for a NURBS curve in our case): tangeant (which is useless for us), minimum (which twists the curve slightly whenever there is a slight turn) and z-up (which keeps the z direction upwards). Because we needed to have control over the curvature of the tracks (i.e. being able to manually twist each point of the curve) we didn’t want to use the minimum option because we had no way of telling how blender had twisted the curve to then compensate it. However, using the z-up mode would totally mess our loopings as you can see below (<em>Figure 1.a</em>). <br/></li>
+<li>Some rules could interact badly with each other (cf <em>Figure 1.b</em>), we then had to carefully choose which rule can be called by another one. To be able to do that, we separated rules in different categories, for example ones that begin with a turn to the right, those that turn to the left, etc. Then, more stochastic symbols had to be implemented, so that it can differentiates which exact rule to call, depending on what happens before and after it. <br/></li>
+<li>Twists are managed in a strict way in Blender, in the sense that <span class="math inline">2<em>n</em><em>π</em></span> rotations (for <span class="math inline"><em>n</em> &gt; 1</span>) are not equal to <span class="math inline">0</span> or <span class="math inline">2<em>π</em></span> ones. That is, if we have for example a rotation of 360° adjacent to a 0°, Blender will make an</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th width="50%"><img src="images/looping-z-up.png" alt="Looping messed up" /></th>
+<th><img src="images/twist-issue-1.jpg" alt="Twist" /></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>Figure 1: A messed up looping</em></td>
+<td><em>Figure 2: sharp turn issue</em></td>
+</tr>
+</tbody>
+</table>
+<h2 id="results">Results</h2>
+<h2 id="how-to-run-the-code">How to run the code</h2>
+<h2 id="contributions">Contributions</h2>
+<p>Lucas Strauss (<em>33.33%</em>): mainly worked on the Blender side (addon and render) and the physically based twisting.</p>
+<p>Joachim Dunant (<em>33.33%</em>): mainly focused on the rules and probabilities as well as the L-System implementation.</p>
+<p>Lucien Iseli (<em>33.33%</em>): mainly worked on the L-System implementation.</p>
+<p>Each team member worked on every part of the project and helped each other whenever they could.</p>
+<h2 id="references">References</h2>
+<p>(Our references did not change since the last report)</p>
+<p><code>Blender</code> to create the track, and to render the final scene.</p>
+<p><code>Python</code> to code the algorithm for Blender.</p>
+<p>Assignment 8 of the course.</p>
+<p>http://pcgbook.com/ https://ieeexplore.ieee.org/document/8627334 https://docs.blender.org/api/2.79/</p>
+</body>
+</html>

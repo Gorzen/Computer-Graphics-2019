@@ -28,22 +28,15 @@
 <p>The minimum deliverable for a passing grade (4.0) would be fully connected and realistic roller coaster. “Realistic” means a track that is close to a real one and that <em>could</em> be realized. I.e the roller coaster loops and have somewhat realistic curves.</p>
 <ol type="1">
 <li>The first extension is the ability to “ride” the roller coaster. That means setting up a camera that follows the track (a bezier curve) from start to end in order to generate a video.</li>
-<li>Procedurally assign twisting speeds to certain sections of the roller coaster. Namely stunts similar to looping but the rotation axis it the track’s axis.</li>
-<li>The second extension is to control the twisting of the rails such that they turn more depending on the speed of the wagon. The twisting should be computed to cancel the centrifugal force, i.e. the passengers should remain on their seats.</li>
+<li>Procedurally assign twisting speeds to certain sections of the roller coaster. Namely stunts similar to looping but the rotation axis is the track’s axis.</li>
+<li>The third extension is to control the twisting of the rails such that they turn more depending on the speed of the wagon. The twisting should be computed to cancel the centrifugal force, i.e. the passengers should remain on their seats.</li>
 </ol>
 <h2 id="milestone-deliverable">Milestone deliverable</h2>
 <h3 id="summary">Summary</h3>
 <p>We are now able to generate a simple procedural Roller Coaster that loops. Our L-System rules do not break this loop and we could run our algorithm to an arbitrary large number of iterations without breaking this property.</p>
 <p>We have a simple interface in Blender that allows the user to select the number of iterations that the L-System will compute. We are currently experimenting on new rules that will make the Roller Coaster less dense on a bigger number of iterations and maybe have a less consistent “style”.</p>
 <h3 id="preliminary-results">Preliminary results</h3>
-<p>First example, with 3 iterations.</p>
-<img style="height:400px;" src="images/generated-track-1.png" alt="Example of generated tracks" />
-<p>Second example, with 3 iterations.</p>
-<img src="images/generated-track-2.png" alt="Example of generated tracks" />
-<p>Third example, with 2 iterations. With looping !</p>
-<img style="height:400px;" style="width:400px;height:400px;" src="images/generated-track-3.png" alt="Example of generated tracks" />
-<p>Fourth example, as a video, to have better 3d perception of the tracks. 3 iterations.</p>
-<embed style="height: 400px;width:400px;" src="images/example.mp4" />
+<p>First example, with 3 iterations. <img src="images/generated-track-1.png" alt="Example of generated tracks" /> Second example, with 3 iterations. <img src="images/generated-track-2.png" alt="Example of generated tracks" /> Third example, with 2 iterations. With looping ! <img src="images/generated-track-3.png" alt="Example of generated tracks" /> Fourth example, as a video, to have better 3d perception of the tracks. 3 iterations. <embed src="images/example.mp4" /></p>
 <h2 id="updated-schedule">Updated schedule</h2>
 <ul>
 <li>29/04 : Fully understand the algorithm and gather some ideas on how to implement it in <code>Blender</code> + readings and understanding of external ressources.</li>
