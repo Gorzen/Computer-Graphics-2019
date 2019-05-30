@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Procedural Roller Coaster</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="icg_report.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header>
+<h1 class="title">Procedural Roller Coaster</h1>
+</header>
+<h1 id="final-report-group-19">Final Report Group 19</h1>
+<h2 id="abstract">Abstract</h2>
+<p>We implemented a 3D stochastic L-System procedural roller coaster as a Blender addon. The addon lets the user choose the number of iterations of the L-System and toggle the realistic twisting of the tracks. In addition to that there is a button that performs the next iteration of the L-System (without having to recompute everything from scratch).</p>
+<h2 id="technical-approach">Technical Approach</h2>
+<h3 id="summary">Summary</h3>
+<p>The use of an L-System to build a somewhat realistic roller coaster made us compute a few technical implementations.</p>
+<p>Firstly, we obviously needed a L-System, which we originally took from the assignment 8 of the course and translated it in python. To compute it in 3 dimensions, we have implemented different symbols for each possible angle (<span class="math inline">±</span> vertical and <span class="math inline">±</span> horizontal). In addition to that, we needed some symbol to compute the distance that the line will have to travel, depending on the original angles.</p>
+<p>Then, we wanted to have a stochastic system, so that we could have different result each time. So we added a parameter to the symbols that give the probability to be chosen at the next iteration (we have to be careful that probabilities sum to 1!). However, not every symbol has to be stochastic (for example angles, fixed lengths, etc), so that we can build predefined rules and have a track that doesn’t get messed up. Those rules are predefined lists of symbols, that are used to have control on the way the L-System evolve. Furthermore, with these rules we can compute some more complex elements such as looping that would be virtually impossible to achieve with only simple rules.</p>
+<p>Because the rules where made by us we had complete control over what they had to look like. The main challenge was to start with a track that loops and keep this property after each iteration. This was achieved by designing the rules such that the end point would be at some fixed length in front of the starting point, and the angle at the end point would be constant for these rules. With this, no matter what symbol gets replaced by the stochastic system, the loop property would remain. This rule makes it harder to think about rules that make sense while holding this property but it still was permissive enough such that we could write interesting rules.</p>
+<p>The first extension was to randomly place some twists over the circuit. For this we added a new dimension for our points which is the rotation (twist). We then added new symbols that will simply draw a 180° or 360° twist (twisting on the right or the left). Then in Blender we set these twist values to every point. However, we need to keep our loop invariants even throughout rotational degrees (twists) and as it is explained below on <em>Problems encountered</em>, Blender has some problems with that. To deal with it (and to let it possible to have 180° or other angles of rotation - even though to keep it realistic we only kept 180° ones), we added a symbol (called END), that will be the very last part of our loop. This symbol is a long straight line, that will be inversely twisting the track depending on the fourth coordinate value on the starting point of END. With that, our roller coaster will always end with a pretty smooth twist and be rotationally continuous on every iteration.</p>
+<p>In the second extension what we wanted was to curve the tracks proportionally to the speed of a wagon that would ride them, to compensate the centrifugal force. In order to achieve this we “simulated” a wagon riding the tracks from start to end and computed the speed using the potential power formula <span class="math inline"><em>v</em><sup>2</sup> = 2 ⋅ <em>g</em> ⋅ <em>Δ</em><em>h</em></span>, with <span class="math inline"><em>Δ</em><em>h</em></span> being the height difference of the points. By scaling this simulated speed by some amount we then multiplied it to the initial turning angle we computed between the previous position and the the next position. Which gives us the tilting angle of the point. From our testing it looked fairly reasonable even though it’s not the exact physical optimal twist angle. We also had to take into account that we may have random twists, so our algorithm shouldn’t overwrite them. Because this tilting operation happens after we computed the points.</p>
+<p>Finally, we decided to add a camera that will follow the path, along with a modeled wagon, to have a nice video. To render the tracks we modeled a small piece of the track that we then repeated a certain number of time to match the length of the curve (using the Array modifier) and then constrained it to follow it (using the Curve modifier).</p>
+<h3 id="problems-encountered">Problems encountered</h3>
+<ul>
+<li>We struggled with Blender in order to make the loopings realistic. Even if they weren’t mandatory it was a personal achievement that we wanted to complete. The problem was that Blender allow us to choose between 3 modes to draw a NURBS curve (in our case) : <em>tangent</em> (which is useless for us), <em>minimum</em> (which twists the curve slightly whenever there is a slight turn) and <em>z-up</em> (which keeps the z direction upwards). Because we needed to have control over the curvature of the tracks (i.e. being able to manually twist each point of the curve) we didn’t want to use the minimum option because we had no way of telling how blender had twisted the curve to then compensate it. However, using the z-up mode would totally mess our loopings up as you can see below (<em>Figure 1.a</em>), because it will have different interpretation on the track below and above the looping, since it wants the Z axis to be always up. Thus even though the tilting is contiguous Blender displays a 180° twist (twice) because of this. However we didn’t have time to solve this issue while using the <em>z-up</em> option. The looping works properly with the <em>minimum</em> one. <br/></li>
+<br/><li>Some rules could interact badly with each other (cf <em>Figure 1.b</em>), so we had to carefully choose which rule can be called by another one. To be able to do that, we separated rules in different categories, for example ones that begin with a turn to the right, those that turn to the left, etc. Then, more stochastic symbols had to be implemented, so that it can differentiates which exact rule to call, depending on what happens before and after it. <br/></li>
+<br/><li>Twists are managed in a strict way in Blender, in the sense that <span class="math inline">2<em>n</em><em>π</em></span> rotations (for <span class="math inline"><em>n</em> &gt; 1</span>) are not equal to <span class="math inline">0</span> or <span class="math inline">2<em>π</em></span> ones. That is, if we have for example a rotation of 360° adjacent to a 0°, Blender will make a rotation of -360° over a single point, to match both side (cf. <em>Figure 1.c</em>). To resolve this, we had to make twists contiguous on the whole track (or until another twist) and to add the END symbol, as explained before. <br/></li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th width="33%"><img src="images/looping-z-up.png" alt="Looping messed up" /></th>
+<th width="33%"><img src="images/twist-issue-1.jpg" alt="Twist" /></th>
+<th width="33%"><img src="images/twist-issue-2.jpg" alt="Twist" /></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>Figure 1.a: Twists on loopings issue</em></td>
+<td><em>Figure 1.b: Sharp turn issue</em></td>
+<td><em>Figure 1.c: Messed up twist issue</em></td>
+</tr>
+</tbody>
+</table>
+<h2 id="results">Results</h2>
+<h5 id="a-video-showing-many-renders-and-results-of-how-the-roller-coasters-look-like.">A video showing many renders and results of how the roller coasters look like.</h5>
+<video width="100%" controls loop="" autoplay="">
+  <source src="images/video.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+<h5 id="some-rules-that-our-l-system-uses">Some rules that our L-System uses</h5>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th width="50%"><img src="images/up_turn_p.png" alt="up_turn_p" /></th>
+<th width="50%"><img src="images/square_p.png" alt="square_p" /></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>Rule: up then a random part, and back down</em></td>
+<td><em>Rule: square with random edges</em></td>
+</tr>
+<tr class="even">
+<td><img src="images/fun_twist_2_p.png" alt="fun_twist_2_p" /></td>
+<td><img src="images/final_slope.png" alt="final_slope" /></td>
+</tr>
+<tr class="odd">
+<td><em>Rule: fun slope going up, not twisted</em></td>
+<td><em>Rule: little slope, without random part</em></td>
+</tr>
+</tbody>
+</table>
+<p><em>Blue circles are the random parts that will be extended further</em></p>
+<h2 id="how-to-run-the-code">How to run the code</h2>
+<p>Installing our addon the classical way does not seem to work so here’s the procedure that works for us (in Blender 2.79):</p>
+<ul>
+<li>Open Blender <strong>from where the project is located</strong> and switch to the “Text Editor” view.</li>
+<li>Open the file “RollerCoaster.py” and click “Run script”</li>
+<li>In object mode you will see on the tool panel our addon named “RollerCoaster”</li>
+<li>Enjoy!</li>
+</ul>
+<p>If anything goes wrong with the imports, try to open our blender project file “rollercoaster.blend”, reload the text editor view (alt+r) and run it again.</p>
+<h2 id="contributions">Contributions</h2>
+<p>Lucas Strauss (<em>33.33%</em>): mainly worked on the Blender side (addon and render) and the physically based twisting.</p>
+<p>Joachim Dunant (<em>33.33%</em>): mainly focused on the rules and probabilities as well as the L-System implementation.</p>
+<p>Lucien Iseli (<em>33.33%</em>): mainly worked on the L-System implementation, computing points and stochastic twists.</p>
+<p>Each team member worked on every part of the project and helped each other whenever they could.</p>
+<h2 id="references">References</h2>
+<p><code>Blender</code> to create the track, and to render the final scene.</p>
+<p><code>Python</code> to code the algorithm for Blender.</p>
+<p>Assignment 8 of the course.</p>
+<p>https://docs.blender.org/api/2.79/</p>
+</body>
+</html>
