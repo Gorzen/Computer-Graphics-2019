@@ -48,6 +48,7 @@ Finally, we decided to add a camera that will follow the path, along with a mode
 
 ## How to run the code
 Installing our addon the classical way does not seem to work so here's the procedure that works for us (in Blender 2.79):
+
 - Open Blender **from where the project is located** and switch to the "Text Editor" view.
 - Open the file "RollerCoaster.py" and click "Run script"
 - In object mode you will see on the tool panel our addon named "RollerCoaster"
